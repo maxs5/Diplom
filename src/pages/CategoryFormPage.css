@@ -1,0 +1,70 @@
+/* Используем общие стили форм */
+.category-form-page {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.category-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+/* Селектор иконок */
+.icon-selector {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.icons-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.icon-option {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 1;
+  font-size: 28px;
+  border: 2px solid transparent;
+  border-radius: var(--radius-md);
+  background-color: var(--color-background-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.icon-option:hover {
+  background-color: var(--color-gray-200);
+  transform: scale(1.1);
+}
+
+.icon-option.icon-selected {
+  border-color: var(--color-primary);
+  background-color: var(--color-primary-light);
+}
+
+/* ============================================
+   АДАПТИВНОСТЬ
+   ============================================ */
+@media (max-width: 768px) {
+  .category-form-page {
+    max-width: 100%;
+  }
+
+  .icons-grid {
+    grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+  }
+
+  .icon-option {
+    font-size: 24px;
+  }
+}

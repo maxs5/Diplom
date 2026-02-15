@@ -1,0 +1,35 @@
+.spinner {
+  display: inline-block;
+}
+
+.spinner-circle {
+  border: 3px solid var(--spinner-track);
+  border-top-color: var(--spinner-head);
+  border-radius: 50%;
+  animation: spinner-rotate 0.8s linear infinite;
+  transition: border-color var(--transition-base);
+}
+
+/* Размеры */
+.spinner-sm .spinner-circle {
+  width: 1rem;
+  height: 1rem;
+  border-width: 2px;
+}
+
+.spinner-md .spinner-circle {
+  width: 2rem;
+  height: 2rem;
+}
+
+.spinner-lg .spinner-circle {
+  width: 3rem;
+  height: 3rem;
+  border-width: 4px;
+}
+
+/* Анимация */
+@keyframes spinner-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

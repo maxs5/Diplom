@@ -1,0 +1,155 @@
+:root {
+  /* Карточки */
+  --card-bg: #ffffff;
+  --card-bg-hover: #f9fafb;
+  --card-border: rgba(0, 0, 0, 0.06);
+  --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --card-shadow-hover: 0 8px 20px rgba(0, 0, 0, 0.12);
+
+  /* Заголовок карточки */
+  --card-header-bg: #f9fafb;
+  --card-header-border: rgba(0, 0, 0, 0.06);
+  --card-header-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+
+  --card-title-color: var(--color-text-primary);
+
+  /* Кнопка в header карточки */
+  --card-action-btn-bg: linear-gradient(135deg, #6366f1, #818cf8);
+  --card-action-btn-bg-hover: linear-gradient(135deg, #4f46e5, #6366f1);
+  --card-action-btn-text: #ffffff;
+  --card-action-btn-shadow: 0 2px 8px rgba(99, 102, 241, 0.25);
+  --card-action-btn-shadow-hover: 0 4px 14px rgba(99, 102, 241, 0.35);
+
+  /* Инпуты */
+  --input-bg: #ffffff;
+  --input-border: #d1d5db;
+  --input-text: #111827;
+  --input-label-color: #374151;
+
+  --input-focus-border: #6366f1;
+  --input-focus-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+
+  --input-disabled-bg: #f3f4f6;
+  --input-disabled-text: #9ca3af;
+
+  --input-error-border: #ef4444;
+  --input-error-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+  --input-error-text: #ef4444;
+
+  /* Select / Icon grid */
+  --icon-bg: #f9fafb;
+  --icon-hover-bg: #e5e7eb;
+  --icon-selected-bg: #eef2ff;
+
+  /* Модалки */
+  --modal-overlay-bg: rgba(0, 0, 0, 0.4);
+  --modal-bg: #ffffff;
+  --modal-border: rgba(0, 0, 0, 0.1);
+  --modal-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+
+  --modal-header-bg: #f9fafb;
+  --modal-header-border: rgba(0, 0, 0, 0.08);
+
+  --modal-title-color: var(--color-text-primary);
+  --modal-body-text: var(--color-text-primary);
+
+  --modal-close-color: #6b7280;
+  --modal-close-color-hover: #111827;
+  --modal-close-bg-hover: #f3f4f6;
+
+  /* Спиннер */
+  --spinner-track: #e5e7eb;
+  --spinner-head: #6366f1;
+
+  /* Прогресс-бары */
+  --progress-track: #e5e7eb;
+  --progress-fill: #6366f1;
+
+  /* Бейджи */
+  --badge-income-bg: rgba(16, 185, 129, 0.12);
+  --badge-expense-bg: rgba(239, 68, 68, 0.12);
+
+  /* AuthPage */
+  --auth-bg: linear-gradient(135deg, #667eea, #764ba2);
+  --auth-header-text: #ffffff;
+  --auth-logo-color: #ffffff;
+  --auth-title-color: #ffffff;
+  --auth-subtitle-color: rgba(255, 255, 255, 0.9);
+  --auth-toggle-text: #ffffff;
+  --auth-toggle-button: #ffffff;
+  --auth-demo-bg: rgba(255, 255, 255, 0.1);
+  --auth-demo-text: #ffffff;
+}
+
+:root.dark-theme {
+  --card-bg: #1f2937;
+  --card-bg-hover: #273244;
+  --card-border: rgba(255, 255, 255, 0.06);
+  --card-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+  --card-shadow-hover: 0 12px 28px rgba(0, 0, 0, 0.55);
+
+  --card-header-bg: #1c1e22;
+  --card-header-border: rgba(255, 255, 255, 0.06);
+  --card-header-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+
+  --card-title-color: #f3f4f6;
+
+  --card-action-btn-bg: linear-gradient(135deg, #4f46e5, #6366f1);
+  --card-action-btn-bg-hover: linear-gradient(135deg, #4338ca, #4f46e5);
+  --card-action-btn-text: #ffffff;
+  --card-action-btn-shadow: 0 2px 8px rgba(99, 102, 241, 0.35);
+  --card-action-btn-shadow-hover: 0 4px 14px rgba(99, 102, 241, 0.45);
+
+  --input-bg: #111827;
+  --input-border: #374151;
+  --input-text: #f9fafb;
+  --input-label-color: #d1d5db;
+
+  --input-focus-border: #818cf8;
+  --input-focus-shadow: 0 0 0 3px rgba(129, 140, 248, 0.2);
+
+  --input-disabled-bg: #1f2937;
+  --input-disabled-text: #6b7280;
+
+  --input-error-border: #ef4444;
+  --input-error-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25);
+  --input-error-text: #fca5a5;
+
+  --icon-bg: #1f2937;
+  --icon-hover-bg: #374151;
+  --icon-selected-bg: rgba(129, 140, 248, 0.15);
+
+  --modal-overlay-bg: rgba(0, 0, 0, 0.6);
+  --modal-bg: #1f2937;
+  --modal-border: rgba(255, 255, 255, 0.08);
+  --modal-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+
+  --modal-header-bg: #111827;
+  --modal-header-border: rgba(255, 255, 255, 0.08);
+
+  --modal-title-color: #f9fafb;
+  --modal-body-text: #e5e7eb;
+
+  --modal-close-color: #9ca3af;
+  --modal-close-color-hover: #ffffff;
+  --modal-close-bg-hover: rgba(255, 255, 255, 0.05);
+
+  --spinner-track: #374151;
+  --spinner-head: #818cf8;
+
+  --progress-track: #374151;
+  --progress-fill: #818cf8;
+
+  --badge-income-bg: rgba(16, 185, 129, 0.15);
+  --badge-expense-bg: rgba(239, 68, 68, 0.15);
+
+  --auth-bg: linear-gradient(135deg, #1e1f25, #2a2d33);
+  --auth-header-text: #ffffff;
+  --auth-logo-color: #ffffff;
+  --auth-title-color: #ffffff;
+  --auth-subtitle-color: #d1d5db;
+  --auth-toggle-text: #ffffff;
+  --auth-toggle-button: #ffffff;
+  --auth-demo-bg: rgba(255, 255, 255, 0.05);
+  --auth-demo-text: #ffffff;
+}

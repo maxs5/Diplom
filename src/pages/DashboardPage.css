@@ -1,0 +1,258 @@
+.dashboard {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Шапка */
+.dashboard-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-xl);
+}
+
+.dashboard-header h1 {
+  margin: 0;
+  color: var(--color-text-primary);
+}
+
+.dashboard-period {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+/* Карточки статистики */
+.dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg) !important;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.stat-icon {
+  font-size: 40px;
+  flex-shrink: 0;
+}
+
+.stat-content {
+  flex: 1;
+}
+
+.stat-label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.stat-value {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+/* Цветовые акценты */
+.stat-card-income .stat-value {
+  color: var(--color-success);
+}
+
+.stat-card-expense .stat-value {
+  color: var(--color-danger);
+}
+
+.stat-card-balance .stat-value {
+  color: var(--color-primary);
+}
+
+/* Графики */
+.dashboard-charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+}
+
+.chart-card {
+  min-height: 400px;
+}
+
+.empty-chart {
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+}
+
+/* Счета */
+.accounts-grid {
+  display: grid;
+  gap: var(--spacing-md);
+}
+
+.account-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  background: var(--card-bg);
+  cursor: pointer;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+
+.account-item:hover {
+  background: var(--card-bg-hover);
+  transform: translateX(4px);
+}
+
+.account-icon {
+  font-size: 32px;
+  flex-shrink: 0;
+}
+
+.account-info {
+  flex: 1;
+}
+
+.account-name {
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 2px;
+}
+
+.account-type {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.account-balance {
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+/* Категории */
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: var(--spacing-md);
+}
+
+.category-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  background: var(--card-bg);
+  cursor: pointer;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+  text-align: center;
+}
+
+.category-item:hover {
+  background: var(--card-bg-hover);
+  transform: translateY(-2px);
+}
+
+.category-icon {
+  font-size: 32px;
+}
+
+.category-name {
+  font-weight: 600;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-sm);
+}
+
+.category-type {
+  font-size: var(--font-size-xs);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-weight: 500;
+}
+
+.category-type.income {
+  background: var(--badge-income-bg);
+  color: var(--color-success);
+}
+
+.category-type.expense {
+  background: var(--badge-expense-bg);
+  color: var(--color-danger);
+}
+
+.category-more {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.category-more:hover {
+  transform: none;
+}
+
+/* Пустое состояние */
+.empty-state {
+  text-align: center;
+  padding: var(--spacing-xl);
+  color: var(--color-text-secondary);
+}
+
+.empty-state p {
+  margin-bottom: var(--spacing-md);
+}
+
+/* Адаптивность */
+@media (max-width: 1024px) {
+  .dashboard-charts {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+  }
+
+  .dashboard-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .chart-card {
+    min-height: 350px;
+  }
+
+  .categories-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .stat-icon {
+    font-size: 32px;
+  }
+
+  .stat-value {
+    font-size: var(--font-size-xl);
+  }
+
+  .categories-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

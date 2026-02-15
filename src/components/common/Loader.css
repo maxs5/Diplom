@@ -1,0 +1,17 @@
+.loader {
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: var(--color-text-secondary);
+}
+
+.loader-fullscreen {
+  min-height: 100vh;
+}
+
+.loader-text {
+  font-size: 0.95rem;
+}

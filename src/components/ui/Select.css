@@ -1,0 +1,55 @@
+.select-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.select-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--input-label-color);
+}
+
+.select {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  border: 1px solid var(--input-border);
+  border-radius: var(--radius-md);
+  background: var(--input-bg);
+  color: var(--input-text);
+  font-family: inherit;
+  cursor: pointer;
+  transition:
+    border var(--transition-base),
+    background var(--transition-base),
+    box-shadow var(--transition-base),
+    color var(--transition-base);
+}
+
+.select:focus {
+  outline: none;
+  border-color: var(--input-focus-border);
+  box-shadow: var(--input-focus-shadow);
+}
+
+.select:disabled {
+  background: var(--input-disabled-bg);
+  color: var(--input-disabled-text);
+  cursor: not-allowed;
+}
+
+/* Ошибка */
+.select-error {
+  border-color: var(--input-error-border);
+}
+
+.select-error:focus {
+  border-color: var(--input-error-border);
+  box-shadow: var(--input-error-shadow);
+}
+
+.select-error-text {
+  font-size: 0.875rem;
+  color: var(--input-error-text);
+}

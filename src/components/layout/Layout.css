@@ -1,0 +1,63 @@
+.layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--app-bg);
+  color: var(--color-text-primary);
+}
+
+/* Тело лэйаута */
+.layout-body {
+  display: flex;
+  flex: 1;
+  position: relative;
+  background: var(--app-bg);
+}
+
+/* Контент */
+.layout-content {
+  flex: 1;
+  padding: var(--spacing-xl);
+  background: var(--content-bg);
+  overflow-y: auto;
+  margin-left: 260px;
+  transition:
+    margin-left var(--transition-base),
+    background var(--transition-base),
+    color var(--transition-base);
+  box-shadow: inset 0 0 0 1px var(--color-border-light);
+}
+
+/* Оверлей */
+.layout-overlay {
+  display: none;
+}
+
+/* Планшеты */
+@media (max-width: 1024px) {
+  .layout-content {
+    margin-left: 0;
+    padding: var(--spacing-lg);
+  }
+}
+
+/* Мобильные */
+@media (max-width: 768px) {
+  .layout-content {
+    padding: var(--spacing-md);
+  }
+
+  .layout-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: var(--overlay-bg);
+    z-index: var(--z-modal-backdrop);
+    animation: fadeIn 0.2s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+}
