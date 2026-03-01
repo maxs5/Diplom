@@ -12,14 +12,23 @@
 
 .select {
   width: 100%;
-  padding: 0.5rem 0.75rem;
+  padding: 0.65rem 2.25rem 0.65rem 0.85rem;
   font-size: 1rem;
   border: 1px solid var(--input-border);
   border-radius: var(--radius-md);
-  background: var(--input-bg);
+  background: color-mix(in srgb, var(--input-bg) 92%, #ffffff 8%);
   color: var(--input-text);
   font-family: inherit;
   cursor: pointer;
+  appearance: none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--color-text-muted) 50%),
+    linear-gradient(135deg, var(--color-text-muted) 50%, transparent 50%);
+  background-position:
+    calc(100% - 16px) calc(50% + 1px),
+    calc(100% - 11px) calc(50% + 1px);
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
   transition:
     border var(--transition-base),
     background var(--transition-base),

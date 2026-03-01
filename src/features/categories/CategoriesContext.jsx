@@ -29,6 +29,17 @@ export function CategoriesProvider({ children }) {
     }
   }, [user]);
 
+  useEffect(() => {
+    if (!user) return undefined;
+
+    const handleDataRefresh = () => {
+      loadCategories();
+    };
+
+    window.addEventListener('finance:categories-sync', handleDataRefresh);
+    return () => window.removeEventListener('finance:categories-sync', handleDataRefresh);
+  }, [user]);
+
   /**
    * Загрузка категорий пользователя
    */
@@ -105,8 +116,68 @@ export function CategoriesProvider({ children }) {
    * Удаление категории
    */
   const deleteCategory = (id) => {
-    const updated = categories.filter(cat => cat.id !== id);
-    return saveCategories(updated);
+    try {
+      const updatedCategories = categories.filter(cat => cat.id !== id);
+      const saveResult = saveCategories(updatedCategories);
+      if (!saveResult.success) return saveResult;
+
+      // Находим операции пользователя по удаляемой категории
+      const allOperations = JSON.parse(localStorage.getItem(STORAGE_KEYS.OPERATIONS) || '[]');
+      const removedOperations = allOperations.filter(
+        op => op.userId === user.id && op.categoryId === id
+      );
+      const filteredOperations = allOperations.filter(
+        op => !(op.userId === user.id && op.categoryId === id)
+      );
+      localStorage.setItem(STORAGE_KEYS.OPERATIONS, JSON.stringify(filteredOperations));
+
+      // Откатываем влияние удалённых операций на балансы счетов
+      if (removedOperations.length > 0) {
+        const allAccounts = JSON.parse(localStorage.getItem(STORAGE_KEYS.ACCOUNTS) || '[]');
+        const accountMap = new Map(
+          allAccounts.map(acc => [acc.id, { ...acc, balance: Number(acc.balance) || 0 }])
+        );
+
+        removedOperations.forEach(op => {
+          const account = accountMap.get(op.accountId);
+          if (!account) return;
+
+          const amount = Number(op.amount) || 0;
+          if (op.type === 'income') {
+            account.balance -= amount;
+          } else {
+            account.balance += amount;
+          }
+        });
+
+        localStorage.setItem(STORAGE_KEYS.ACCOUNTS, JSON.stringify(Array.from(accountMap.values())));
+      }
+
+      // Удаляем связанные бюджеты
+      const allBudgets = JSON.parse(localStorage.getItem(STORAGE_KEYS.BUDGETS) || '[]');
+      const filteredBudgets = allBudgets.filter(
+        budget => !(budget.userId === user.id && budget.categoryId === id)
+      );
+      localStorage.setItem(STORAGE_KEYS.BUDGETS, JSON.stringify(filteredBudgets));
+
+      // Удаляем связанные рекуррентные операции
+      const allRecurring = JSON.parse(localStorage.getItem(STORAGE_KEYS.RECURRING) || '[]');
+      const filteredRecurring = allRecurring.filter(
+        op => !(op.userId === user.id && op.categoryId === id)
+      );
+      localStorage.setItem(STORAGE_KEYS.RECURRING, JSON.stringify(filteredRecurring));
+
+      window.dispatchEvent(new Event('finance:categories-sync'));
+      window.dispatchEvent(new Event('finance:operations-sync'));
+      window.dispatchEvent(new Event('finance:accounts-sync'));
+      window.dispatchEvent(new Event('finance:budgets-sync'));
+      window.dispatchEvent(new Event('finance:recurring-sync'));
+
+      return { success: true };
+    } catch (error) {
+      console.error('Ошибка каскадного удаления категории:', error);
+      return { success: false, error: 'Не удалось удалить категорию' };
+    }
   };
 
   /**

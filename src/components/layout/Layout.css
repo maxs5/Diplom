@@ -26,6 +26,7 @@
     background var(--transition-base),
     color var(--transition-base);
   box-shadow: inset 0 0 0 1px var(--color-border-light);
+  border-top-left-radius: 20px;
 }
 
 /* Оверлей */
@@ -38,6 +39,7 @@
   .layout-content {
     margin-left: 0;
     padding: var(--spacing-lg);
+    border-top-left-radius: 0;
   }
 }
 

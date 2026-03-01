@@ -52,9 +52,41 @@
     build: {
       target: 'esnext',
       outDir: 'build',
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (!id.includes('node_modules')) return;
+
+            if (id.includes('@reduxjs/toolkit') || id.includes('react-redux')) {
+              return 'vendor-redux';
+            }
+
+            if (id.includes('recharts')) {
+              return 'vendor-charts';
+            }
+
+            if (id.includes('@radix-ui')) {
+              return 'vendor-radix';
+            }
+
+            if (id.includes('lucide-react') || id.includes('sonner')) {
+              return 'vendor-ui';
+            }
+
+            return 'vendor';
+          },
+        },
+      },
     },
     server: {
-      port: 3000,
+      port: 3001,
+      strictPort: true,
       open: true,
+      proxy: {
+        '/api': {
+          target: 'http://localhost:3002',
+          changeOrigin: true,
+        },
+      },
     },
   });

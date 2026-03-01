@@ -11,40 +11,106 @@
  */
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { STORAGE_KEYS, DEFAULT_CATEGORIES } from '../../data/constants.js';
-import { hashPasswordWithSalt, generateSalt, verifyPassword } from '../../utils/password.js';
 import { Loader } from '../../components/common/Loader.jsx';
+import { setUser, clearUser } from '../../store/authSlice.js';
 
 // Создаём контекст
 const AuthContext = createContext(null);
+const TOKEN_STORAGE_KEY = 'financeApp_token';
 
 /**
  * Провайдер контекста авторизации
  * Оборачивает всё приложение и предоставляет данные о пользователе
  */
 export function AuthProvider({ children }) {
-  // Состояние текущего пользователя
-  const [user, setUser] = useState(null);
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.user);
   
   // Флаг загрузки (проверяем localStorage при старте)
   const [loading, setLoading] = useState(true);
+
+  const parseJsonSafe = async (response) => {
+    try {
+      return await response.json();
+    } catch {
+      return {};
+    }
+  };
 
   /**
    * При монтировании компонента проверяем localStorage
    * Если там есть пользователь, восстанавливаем сессию
    */
   useEffect(() => {
-    try {
-      const savedUser = localStorage.getItem(STORAGE_KEYS.USER);
-      if (savedUser) {
-        setUser(JSON.parse(savedUser));
+    const initializeSession = async () => {
+      let savedUser = null;
+      try {
+        const savedUserRaw = localStorage.getItem(STORAGE_KEYS.USER);
+        savedUser = savedUserRaw ? JSON.parse(savedUserRaw) : null;
+      } catch {
+        savedUser = null;
       }
-    } catch (error) {
-      console.error('Ошибка загрузки пользователя:', error);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+
+      try {
+        const token = localStorage.getItem(TOKEN_STORAGE_KEY);
+        if (!token) {
+          if (savedUser) {
+            dispatch(setUser(savedUser));
+          }
+          return;
+        }
+
+        const response = await fetch('/api/auth/me', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.status === 401) {
+          throw new Error('UNAUTHORIZED');
+        }
+
+        if (!response.ok) {
+          if (savedUser) {
+            dispatch(setUser(savedUser));
+            return;
+          }
+          throw new Error('SESSION_CHECK_FAILED');
+        }
+
+        let data;
+        try {
+          data = await response.json();
+        } catch (error) {
+          if (savedUser) {
+            dispatch(setUser(savedUser));
+            return;
+          }
+          throw error;
+        }
+
+        dispatch(setUser(data.user));
+        localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(data.user));
+      } catch (error) {
+        console.error('Ошибка загрузки пользователя:', error);
+        if (error.message === 'UNAUTHORIZED') {
+          localStorage.removeItem(TOKEN_STORAGE_KEY);
+          localStorage.removeItem(STORAGE_KEYS.USER);
+          dispatch(clearUser());
+        } else if (savedUser) {
+          dispatch(setUser(savedUser));
+        } else {
+          dispatch(clearUser());
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    initializeSession();
+  }, [dispatch]);
 
   /**
    * Вход в систему
@@ -52,35 +118,24 @@ export function AuthProvider({ children }) {
    * @param {string} password - Пароль
    * @returns {Object} { success: boolean, error?: string }
    */
-  const login = (email, password) => {
+  const login = async (email, password) => {
     try {
-      // Получаем всех зарегистрированных пользователей
-      const users = JSON.parse(localStorage.getItem('financeApp_users') || '[]');
-      
-      // Ищем пользователя с таким email
-      const foundUser = users.find(u => u.email === email);
-      
-      if (!foundUser) {
-        return { success: false, error: 'Пользователь не найден' };
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await parseJsonSafe(response);
+      if (!response.ok) {
+        return { success: false, error: data.error || 'Неверный email или пароль' };
       }
-      
-      // Проверяем пароль с использованием хеширования
-      const passwordHash = hashPasswordWithSalt(password, foundUser.passwordSalt);
-      if (foundUser.passwordHash !== passwordHash) {
-        return { success: false, error: 'Неверный пароль' };
-      }
-      
-      // Создаём объект пользователя без пароля
-      const userWithoutPassword = {
-        id: foundUser.id,
-        email: foundUser.email,
-        name: foundUser.name,
-        currency: foundUser.currency || 'RUB',
-      };
-      
-      // Сохраняем в state и localStorage
-      setUser(userWithoutPassword);
-      localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(userWithoutPassword));
+
+      dispatch(setUser(data.user));
+      localStorage.setItem(TOKEN_STORAGE_KEY, data.token);
+      localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(data.user));
       
       return { success: true };
     } catch (error) {
@@ -94,59 +149,28 @@ export function AuthProvider({ children }) {
    * @param {Object} data - Данные пользователя
    * @returns {Object} { success: boolean, error?: string }
    */
-  const register = (data) => {
+  const register = async (data) => {
     try {
       const { email, password, name } = data;
-      
-      // Валидация
-      if (!email || !password || !name) {
-        return { success: false, error: 'Заполните все поля' };
+
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password, name }),
+      });
+
+      const result = await parseJsonSafe(response);
+      if (!response.ok) {
+        return { success: false, error: result.error || 'Ошибка регистрации' };
       }
-      
-      if (password.length < 6) {
-        return { success: false, error: 'Пароль должен быть не менее 6 символов' };
-      }
-      
-      // Получаем список пользователей
-      const users = JSON.parse(localStorage.getItem('financeApp_users') || '[]');
-      
-      // Проверяем, не занят ли email
-      if (users.find(u => u.email === email)) {
-        return { success: false, error: 'Пользователь с таким email уже существует' };
-      }
-      
-      // Генерируем соль и хешируем пароль
-      const tempSalt = generateSalt();
-      const passwordHash = hashPasswordWithSalt(password, tempSalt);
-      
-      // Создаём нового пользователя
-      const newUser = {
-        id: Date.now().toString(), // Простой способ генерации ID
-        email,
-        passwordHash, // Сохраняем хеш вместо пароля
-        passwordSalt: tempSalt, // Сохраняем соль
-        name,
-        currency: 'RUB',
-        createdAt: new Date().toISOString(),
-      };
-      
-      // Добавляем в список
-      users.push(newUser);
-      localStorage.setItem('financeApp_users', JSON.stringify(users));
-      
-      // Создаём дефолтные категории для нового пользователя
-      createDefaultCategories(newUser.id);
-      
-      // Автоматически входим
-      const userWithoutPassword = {
-        id: newUser.id,
-        email: newUser.email,
-        name: newUser.name,
-        currency: newUser.currency,
-      };
-      
-      setUser(userWithoutPassword);
-      localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(userWithoutPassword));
+
+      createDefaultCategories(result.user.id);
+
+      dispatch(setUser(result.user));
+      localStorage.setItem(TOKEN_STORAGE_KEY, result.token);
+      localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(result.user));
       
       return { success: true };
     } catch (error) {
@@ -182,7 +206,8 @@ export function AuthProvider({ children }) {
    * Выход из системы
    */
   const logout = () => {
-    setUser(null);
+    dispatch(clearUser());
+    localStorage.removeItem(TOKEN_STORAGE_KEY);
     localStorage.removeItem(STORAGE_KEYS.USER);
   };
 
@@ -190,24 +215,30 @@ export function AuthProvider({ children }) {
    * Обновление профиля пользователя
    * @param {Object} updates - Новые данные
    */
-  const updateProfile = (updates) => {
+  const updateProfile = async (updates) => {
     try {
-      // Обновляем в state
-      const updatedUser = { ...user, ...updates };
-      setUser(updatedUser);
-      
-      // Обновляем в localStorage (текущая сессия)
-      localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(updatedUser));
-      
-      // Обновляем в списке всех пользователей
-      const users = JSON.parse(localStorage.getItem('financeApp_users') || '[]');
-      const userIndex = users.findIndex(u => u.id === user.id);
-      
-      if (userIndex !== -1) {
-        users[userIndex] = { ...users[userIndex], ...updates };
-        localStorage.setItem('financeApp_users', JSON.stringify(users));
+      const token = localStorage.getItem(TOKEN_STORAGE_KEY);
+      if (!token) {
+        return { success: false, error: 'Сессия истекла. Войдите снова.' };
       }
-      
+
+      const response = await fetch('/api/users/me', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(updates),
+      });
+
+      const data = await parseJsonSafe(response);
+      if (!response.ok) {
+        return { success: false, error: data.error || 'Не удалось обновить профиль' };
+      }
+
+      dispatch(setUser(data.user));
+      localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(data.user));
+
       return { success: true };
     } catch (error) {
       console.error('Ошибка обновления профиля:', error);

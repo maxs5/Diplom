@@ -14,6 +14,7 @@
 .dashboard-header h1 {
   margin: 0;
   color: var(--color-text-primary);
+  letter-spacing: 0.01em;
 }
 
 .dashboard-period {
@@ -34,17 +35,24 @@
   align-items: center;
   gap: var(--spacing-md);
   padding: var(--spacing-lg) !important;
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+  border: 1px solid var(--color-border-light);
 }
 
 .stat-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
   box-shadow: var(--shadow-md);
 }
 
 .stat-icon {
-  font-size: 40px;
+  font-size: 36px;
   flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-full);
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--color-primary) 10%, transparent);
 }
 
 .stat-content {
@@ -58,22 +66,32 @@
 }
 
 .stat-value {
-  font-size: var(--font-size-2xl);
+  font-size: clamp(1.35rem, 2.4vw, 1.8rem);
   font-weight: 700;
   color: var(--color-text-primary);
+  letter-spacing: -0.02em;
 }
 
 /* Цветовые акценты */
 .stat-card-income .stat-value {
   color: var(--color-success);
 }
+.stat-card-income .stat-icon {
+  background: color-mix(in srgb, var(--color-success) 16%, transparent);
+}
 
 .stat-card-expense .stat-value {
   color: var(--color-danger);
 }
+.stat-card-expense .stat-icon {
+  background: color-mix(in srgb, var(--color-danger) 14%, transparent);
+}
 
-.stat-card-balance .stat-value {
+.stat-card-total .stat-value {
   color: var(--color-primary);
+}
+.stat-card-total .stat-icon {
+  background: color-mix(in srgb, var(--color-primary) 16%, transparent);
 }
 
 /* Графики */
@@ -108,9 +126,10 @@
   gap: var(--spacing-md);
   padding: var(--spacing-md);
   border-radius: var(--radius-md);
-  background: var(--card-bg);
+  background: color-mix(in srgb, var(--card-bg) 86%, transparent);
   cursor: pointer;
   transition: background var(--transition-fast), transform var(--transition-fast);
+  border: 1px solid var(--color-border-light);
 }
 
 .account-item:hover {
@@ -158,10 +177,11 @@
   gap: var(--spacing-sm);
   padding: var(--spacing-md);
   border-radius: var(--radius-md);
-  background: var(--card-bg);
+  background: color-mix(in srgb, var(--card-bg) 90%, transparent);
   cursor: pointer;
   transition: background var(--transition-fast), transform var(--transition-fast);
   text-align: center;
+  border: 1px solid var(--color-border-light);
 }
 
 .category-item:hover {

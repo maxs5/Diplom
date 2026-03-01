@@ -4,6 +4,24 @@
   gap: 0.5rem;
 }
 
+.input-control {
+  position: relative;
+}
+
+.input-control-with-icon .input {
+  padding-left: 2.4rem;
+}
+
+.input-icon {
+  position: absolute;
+  top: 50%;
+  left: 0.8rem;
+  transform: translateY(-50%);
+  color: var(--color-text-muted);
+  font-size: 1rem;
+  pointer-events: none;
+}
+
 .input-label {
   font-size: 0.875rem;
   font-weight: 500;
@@ -12,11 +30,11 @@
 
 .input {
   width: 100%;
-  padding: 0.5rem 0.75rem;
+  padding: 0.65rem 0.85rem;
   font-size: 1rem;
   border: 1px solid var(--input-border);
   border-radius: var(--radius-md);
-  background: var(--input-bg);
+  background: color-mix(in srgb, var(--input-bg) 92%, #ffffff 8%);
   color: var(--input-text);
   font-family: inherit;
   transition:
@@ -30,6 +48,7 @@
   outline: none;
   border-color: var(--input-focus-border);
   box-shadow: var(--input-focus-shadow);
+  background: var(--input-bg);
 }
 
 .input:disabled {

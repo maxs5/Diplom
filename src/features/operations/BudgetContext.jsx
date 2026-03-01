@@ -30,6 +30,17 @@ export function BudgetProvider({ children }) {
     }
   }, [user]);
 
+  useEffect(() => {
+    if (!user) return undefined;
+
+    const handleDataRefresh = () => {
+      loadBudgets();
+    };
+
+    window.addEventListener('finance:budgets-sync', handleDataRefresh);
+    return () => window.removeEventListener('finance:budgets-sync', handleDataRefresh);
+  }, [user]);
+
   /**
    * Загрузка бюджетов пользователя
    */

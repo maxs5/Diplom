@@ -1,4 +1,5 @@
 .card {
+  position: relative;
   background: var(--card-bg);
   border-radius: 12px;
   padding: 0;
@@ -8,8 +9,17 @@
   transition: transform 0.2s ease, box-shadow 0.2s ease, background var(--transition-base);
 }
 
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: 12px;
+  background: linear-gradient(155deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0));
+}
+
 .card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
   box-shadow: var(--card-shadow-hover);
 }
 
@@ -57,4 +67,6 @@
   padding: 18px;
   color: var(--card-body-text);
   font-size: 0.95rem;
+  position: relative;
+  z-index: 1;
 }

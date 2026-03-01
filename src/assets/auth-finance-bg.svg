@@ -1,0 +1,72 @@
+<svg width="1600" height="1000" viewBox="0 0 1600 1000" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="140" y1="90" x2="1480" y2="920" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#EEF3F8"/>
+      <stop offset="0.48" stop-color="#D8E2EC"/>
+      <stop offset="1" stop-color="#C7D3E0"/>
+    </linearGradient>
+    <linearGradient id="sheet" x1="470" y1="300" x2="1240" y2="840" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#F7FBFF"/>
+      <stop offset="1" stop-color="#DFE8F2"/>
+    </linearGradient>
+    <linearGradient id="calc" x1="120" y1="80" x2="680" y2="640" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#CBD6E2"/>
+      <stop offset="1" stop-color="#B7C5D4"/>
+    </linearGradient>
+    <radialGradient id="coin" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(0 0) rotate(90) scale(52 52)">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="0.42" stop-color="#EDF2F7"/>
+      <stop offset="1" stop-color="#C8D2DE"/>
+    </radialGradient>
+    <filter id="soft" x="-80" y="-80" width="1760" height="1160" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="10"/>
+    </filter>
+  </defs>
+
+  <rect width="1600" height="1000" fill="url(#bg)"/>
+
+  <g opacity="0.75" filter="url(#soft)">
+    <ellipse cx="1180" cy="415" rx="290" ry="210" fill="#EAF0F6"/>
+    <ellipse cx="310" cy="180" rx="260" ry="170" fill="#DAE4EE"/>
+  </g>
+
+  <g transform="rotate(-36 280 210)">
+    <rect x="40" y="-60" width="760" height="690" rx="36" fill="url(#calc)" opacity="0.72"/>
+    <g opacity="0.52">
+      <circle cx="176" cy="88" r="38" fill="#EFF4FA"/>
+      <circle cx="322" cy="88" r="38" fill="#EFF4FA"/>
+      <circle cx="468" cy="88" r="38" fill="#EFF4FA"/>
+      <circle cx="614" cy="88" r="38" fill="#EFF4FA"/>
+      <circle cx="176" cy="226" r="38" fill="#EFF4FA"/>
+      <circle cx="322" cy="226" r="38" fill="#EFF4FA"/>
+      <circle cx="468" cy="226" r="38" fill="#EFF4FA"/>
+      <circle cx="614" cy="226" r="38" fill="#EFF4FA"/>
+      <circle cx="176" cy="364" r="38" fill="#EFF4FA"/>
+      <circle cx="322" cy="364" r="38" fill="#EFF4FA"/>
+      <circle cx="468" cy="364" r="38" fill="#EFF4FA"/>
+      <circle cx="614" cy="364" r="38" fill="#EFF4FA"/>
+      <circle cx="176" cy="502" r="38" fill="#EFF4FA"/>
+      <circle cx="322" cy="502" r="38" fill="#EFF4FA"/>
+      <circle cx="468" cy="502" r="38" fill="#EFF4FA"/>
+      <circle cx="614" cy="502" r="38" fill="#EFF4FA"/>
+    </g>
+  </g>
+
+  <g transform="rotate(-11 980 610)">
+    <rect x="430" y="250" width="910" height="640" rx="22" fill="url(#sheet)" opacity="0.86"/>
+    <polyline points="520,620 620,545 680,565 760,470 845,510 910,440 980,470 1065,392 1140,422 1240,338"
+      fill="none" stroke="#98A9BC" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" opacity="0.82"/>
+    <polyline points="520,740 620,700 700,745 780,682 845,718 910,670 988,694 1060,640 1138,668 1240,612"
+      fill="none" stroke="#A9B8C8" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" opacity="0.68"/>
+  </g>
+
+  <g opacity="0.93">
+    <ellipse cx="1160" cy="390" rx="92" ry="36" transform="rotate(-16 1160 390)" fill="url(#coin)"/>
+    <ellipse cx="1216" cy="425" rx="92" ry="36" transform="rotate(-16 1216 425)" fill="url(#coin)"/>
+    <ellipse cx="1270" cy="458" rx="92" ry="36" transform="rotate(-16 1270 458)" fill="url(#coin)"/>
+    <ellipse cx="1326" cy="492" rx="92" ry="36" transform="rotate(-16 1326 492)" fill="url(#coin)"/>
+    <ellipse cx="1382" cy="526" rx="92" ry="36" transform="rotate(-16 1382 526)" fill="url(#coin)"/>
+  </g>
+
+  <rect width="1600" height="1000" fill="#FFFFFF" fill-opacity="0.33"/>
+</svg>

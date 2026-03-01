@@ -106,9 +106,9 @@ export function AuthPage() {
     await new Promise(resolve => setTimeout(resolve, 500));
     
     // Вход или регистрация
-    const result = isLogin
+    const result = await (isLogin
       ? login(formData.email, formData.password)
-      : register(formData);
+      : register(formData));
     
     setLoading(false);
     

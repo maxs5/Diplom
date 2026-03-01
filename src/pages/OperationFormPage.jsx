@@ -103,10 +103,13 @@ export function OperationFormPage() {
       newErrors.categoryId = 'Выберите категорию';
     }
 
-    if (!formData.amount) {
+    if (formData.amount === '' || formData.amount === null || formData.amount === undefined) {
       newErrors.amount = 'Введите сумму';
-    } else if (parseFloat(formData.amount) <= 0) {
-      newErrors.amount = 'Сумма должна быть больше 0';
+    } else {
+      const amountValue = Number(formData.amount);
+      if (Number.isNaN(amountValue) || amountValue <= 0) {
+        newErrors.amount = 'Сумма должна быть больше 0';
+      }
     }
 
     if (!formData.date) {

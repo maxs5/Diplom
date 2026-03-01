@@ -4,7 +4,7 @@
 
 :root {
   /* Шрифты */
-  --font-sans: ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Segoe UI Variable", "Trebuchet MS", "Segoe UI", "Candara", sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
   /* Цвета бренда */
@@ -39,15 +39,61 @@
   --color-text-primary: #111827;
   --color-text-secondary: #6b7280;
   --color-text-tertiary: #9ca3af;
+  --color-text-muted: #7b8794;
 
   /* Границы */
   --color-border: #e5e7eb;
   --color-border-dark: #d1d5db;
+  --color-border-light: rgba(138, 153, 171, 0.22);
+
+  /* Фоны приложения */
+  --app-bg: radial-gradient(circle at 0% -20%, #e9f0ff 0%, #f8fbff 44%, #f3f8ff 100%);
+  --content-bg: linear-gradient(165deg, rgba(255, 255, 255, 0.86), rgba(248, 252, 255, 0.76));
+  --overlay-bg: rgba(17, 24, 39, 0.32);
 
   /* Тени */
   --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.05);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  --shadow-header: 0 8px 26px rgb(148 163 184 / 0.2);
+  --shadow-sidebar: 12px 0 24px rgb(148 163 184 / 0.14);
+
+  /* Header / Sidebar */
+  --header-bg: rgba(255, 255, 255, 0.8);
+  --header-user-bg: rgba(99, 102, 241, 0.08);
+  --header-user-bg-hover: rgba(99, 102, 241, 0.16);
+  --hover-bg: rgba(99, 102, 241, 0.1);
+  --sidebar-bg: rgba(255, 255, 255, 0.86);
+  --sidebar-hover-bg: rgba(99, 102, 241, 0.08);
+  --sidebar-active-bg: linear-gradient(90deg, rgba(99, 102, 241, 0.2), rgba(129, 140, 248, 0.08));
+
+  /* Кнопки */
+  --btn-primary-bg: linear-gradient(135deg, #2d6cdf, #5b8eff);
+  --btn-primary-bg-hover: linear-gradient(135deg, #2357bc, #4675e0);
+  --btn-primary-text: #ffffff;
+  --btn-primary-shadow: 0 10px 18px rgba(45, 108, 223, 0.26);
+  --btn-primary-shadow-hover: 0 14px 24px rgba(35, 87, 188, 0.32);
+
+  --btn-secondary-bg: #ffffff;
+  --btn-secondary-bg-hover: #f4f7ff;
+  --btn-secondary-border: #d5deee;
+  --btn-secondary-text: #29415c;
+  --btn-secondary-text-hover: #1f3550;
+
+  --btn-ghost-border: rgba(138, 153, 171, 0.38);
+  --btn-ghost-text: #40566f;
+  --btn-ghost-bg-hover: rgba(64, 86, 111, 0.08);
+  --btn-ghost-text-hover: #22374f;
+
+  --btn-danger-bg: linear-gradient(135deg, #e04949, #f06666);
+  --btn-danger-bg-hover: linear-gradient(135deg, #cd3636, #db5454);
+  --btn-danger-text: #ffffff;
+  --btn-danger-shadow: 0 10px 18px rgba(224, 73, 73, 0.25);
+  --btn-danger-shadow-hover: 0 14px 24px rgba(205, 54, 54, 0.3);
+
+  /* Карточки */
+  --card-body-text: var(--color-text-primary);
+  --warning-bg: rgba(245, 158, 11, 0.16);
 
   /* Отступы */
   --spacing-xs: 0.25rem;
@@ -90,18 +136,60 @@
    ============================================ */
 
 :root.dark-theme {
-  --color-background: #111827;
-  --color-background-secondary: #1f2937;
-  --color-background-tertiary: #374151;
+  --color-background: #0f172a;
+  --color-background-secondary: #111827;
+  --color-background-tertiary: #1f2937;
 
   --color-text-primary: #f9fafb;
-  --color-text-secondary: #d1d5db;
-  --color-text-tertiary: #9ca3af;
+  --color-text-secondary: #cbd5e1;
+  --color-text-tertiary: #94a3b8;
+  --color-text-muted: #8a9bb3;
 
-  --color-border: #374151;
-  --color-border-dark: #4b5563;
+  --color-border: #273449;
+  --color-border-dark: #334155;
+  --color-border-light: rgba(148, 163, 184, 0.18);
 
   --color-primary-light: #6366f1;
+
+  --app-bg: radial-gradient(circle at 0% -18%, #1e293b 0%, #111827 42%, #0f172a 100%);
+  --content-bg: linear-gradient(165deg, rgba(15, 23, 42, 0.8), rgba(17, 24, 39, 0.78));
+  --overlay-bg: rgba(2, 6, 23, 0.64);
+
+  --shadow-header: 0 8px 30px rgb(2 6 23 / 0.5);
+  --shadow-sidebar: 14px 0 28px rgb(2 6 23 / 0.45);
+
+  --header-bg: rgba(17, 24, 39, 0.82);
+  --header-user-bg: rgba(99, 102, 241, 0.2);
+  --header-user-bg-hover: rgba(99, 102, 241, 0.3);
+  --hover-bg: rgba(99, 102, 241, 0.2);
+  --sidebar-bg: rgba(15, 23, 42, 0.9);
+  --sidebar-hover-bg: rgba(99, 102, 241, 0.16);
+  --sidebar-active-bg: linear-gradient(90deg, rgba(99, 102, 241, 0.32), rgba(99, 102, 241, 0.08));
+
+  --btn-primary-bg: linear-gradient(135deg, #3b82f6, #6366f1);
+  --btn-primary-bg-hover: linear-gradient(135deg, #2563eb, #4f46e5);
+  --btn-primary-text: #ffffff;
+  --btn-primary-shadow: 0 10px 20px rgba(59, 130, 246, 0.25);
+  --btn-primary-shadow-hover: 0 14px 26px rgba(37, 99, 235, 0.3);
+
+  --btn-secondary-bg: rgba(30, 41, 59, 0.9);
+  --btn-secondary-bg-hover: rgba(51, 65, 85, 0.95);
+  --btn-secondary-border: rgba(148, 163, 184, 0.28);
+  --btn-secondary-text: #e2e8f0;
+  --btn-secondary-text-hover: #ffffff;
+
+  --btn-ghost-border: rgba(148, 163, 184, 0.32);
+  --btn-ghost-text: #dbe5f2;
+  --btn-ghost-bg-hover: rgba(148, 163, 184, 0.12);
+  --btn-ghost-text-hover: #ffffff;
+
+  --btn-danger-bg: linear-gradient(135deg, #ef4444, #f87171);
+  --btn-danger-bg-hover: linear-gradient(135deg, #dc2626, #ef4444);
+  --btn-danger-text: #ffffff;
+  --btn-danger-shadow: 0 10px 18px rgba(239, 68, 68, 0.26);
+  --btn-danger-shadow-hover: 0 14px 24px rgba(220, 38, 38, 0.32);
+
+  --warning-bg: rgba(245, 158, 11, 0.22);
 }
 
 /* ============================================
@@ -121,10 +209,17 @@ html {
 
 body {
   font-family: var(--font-sans);
-  background: var(--color-background-secondary);
+  background: var(--app-bg);
   color: var(--color-text-primary);
   line-height: 1.6;
   overflow-x: hidden;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 2px solid rgba(59, 130, 246, 0.45);
+  outline-offset: 2px;
 }
 
 img {
@@ -170,4 +265,15 @@ img {
 ::-webkit-scrollbar-thumb {
   background: var(--color-gray-300);
   border-radius: var(--radius-full);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

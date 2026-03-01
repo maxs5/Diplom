@@ -17,10 +17,13 @@ export function Select({
   label, 
   error, 
   options = [],
+  placeholder,
   className = '',
   children,
   ...props 
 }) {
+  const hasPlaceholder = Boolean(placeholder);
+
   return (
     <div className="select-wrapper">
       {label && (
@@ -32,6 +35,11 @@ export function Select({
         className={`select ${error ? 'select-error' : ''} ${className}`}
         {...props}
       >
+        {hasPlaceholder && (
+          <option value="" disabled>
+            {placeholder}
+          </option>
+        )}
         {children || options.map(opt => (
           <option key={opt.value} value={opt.value}>
             {opt.label}

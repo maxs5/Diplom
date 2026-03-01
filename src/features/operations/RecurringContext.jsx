@@ -29,6 +29,17 @@ export function RecurringProvider({ children }) {
     }
   }, [user]);
 
+  useEffect(() => {
+    if (!user) return undefined;
+
+    const handleDataRefresh = () => {
+      loadRecurring();
+    };
+
+    window.addEventListener('finance:recurring-sync', handleDataRefresh);
+    return () => window.removeEventListener('finance:recurring-sync', handleDataRefresh);
+  }, [user]);
+
   /**
    * Загрузка рекуррентных операций пользователя
    */
@@ -52,8 +63,22 @@ export function RecurringProvider({ children }) {
       const { type, accountId, categoryId, amount, comment, interval, nextDate } = data;
 
       // Валидация
-      if (!type || !accountId || !categoryId || !amount || !interval || !nextDate) {
+      if (
+        !type ||
+        !accountId ||
+        !categoryId ||
+        amount === '' ||
+        amount === null ||
+        amount === undefined ||
+        !interval ||
+        !nextDate
+      ) {
         return { success: false, error: 'Заполните все обязательные поля' };
+      }
+
+      const amountValue = Number(amount);
+      if (Number.isNaN(amountValue) || amountValue <= 0) {
+        return { success: false, error: 'Сумма должна быть больше 0' };
       }
 
       const newRecurring = {
@@ -62,7 +87,7 @@ export function RecurringProvider({ children }) {
         type,
         accountId,
         categoryId,
-        amount: parseFloat(amount),
+        amount: amountValue,
         comment,
         interval, // 'daily', 'weekly', 'monthly', 'yearly'
         nextDate,

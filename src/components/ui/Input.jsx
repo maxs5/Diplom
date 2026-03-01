@@ -14,7 +14,8 @@ import './Input.css';
 
 export function Input({ 
   label, 
-  error, 
+  error,
+  icon,
   className = '',
   ...props 
 }) {
@@ -25,10 +26,13 @@ export function Input({
           {label}
         </label>
       )}
-      <input
-        className={`input ${error ? 'input-error' : ''} ${className}`}
-        {...props}
-      />
+      <div className={`input-control ${icon ? 'input-control-with-icon' : ''}`}>
+        {icon && <span className="input-icon">{icon}</span>}
+        <input
+          className={`input ${error ? 'input-error' : ''} ${className}`}
+          {...props}
+        />
+      </div>
       {error && (
         <span className="input-error-text">{error}</span>
       )}

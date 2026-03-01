@@ -16,6 +16,7 @@ import { Input } from '../components/ui/Input.jsx';
 import { Select } from '../components/ui/Select.jsx';
 import { Spinner } from '../components/ui/Spinner.jsx';
 import { CURRENCIES } from '../data/constants.js';
+import { STORAGE_KEYS } from '../data/constants.js';
 import './SettingsPage.css';
 
 export function SettingsPage() {
@@ -30,6 +31,7 @@ export function SettingsPage() {
 
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const [resetLoading, setResetLoading] = useState(false);
 
   /**
    * Обработчик изменения
@@ -77,7 +79,7 @@ export function SettingsPage() {
     // Небольшая задержка для UX
     await new Promise(resolve => setTimeout(resolve, 500));
 
-    const result = updateProfile(formData);
+    const result = await updateProfile(formData);
     
     setLoading(false);
 
@@ -85,6 +87,46 @@ export function SettingsPage() {
       toast.success('Настройки сохранены');
     } else {
       toast.error(result.error || 'Не удалось сохранить настройки');
+    }
+  };
+
+  const handleResetData = () => {
+    if (!user?.id) return;
+
+    const confirmed = window.confirm(
+      'Удалить все ваши счета, категории, операции, бюджеты и автоплатежи?'
+    );
+    if (!confirmed) return;
+
+    setResetLoading(true);
+
+    try {
+      const keysToClear = [
+        STORAGE_KEYS.ACCOUNTS,
+        STORAGE_KEYS.CATEGORIES,
+        STORAGE_KEYS.OPERATIONS,
+        STORAGE_KEYS.BUDGETS,
+        STORAGE_KEYS.RECURRING,
+      ];
+
+      keysToClear.forEach((key) => {
+        const allItems = JSON.parse(localStorage.getItem(key) || '[]');
+        const onlyOtherUsers = allItems.filter((item) => item.userId !== user.id);
+        localStorage.setItem(key, JSON.stringify(onlyOtherUsers));
+      });
+
+      window.dispatchEvent(new Event('finance:accounts-sync'));
+      window.dispatchEvent(new Event('finance:categories-sync'));
+      window.dispatchEvent(new Event('finance:operations-sync'));
+      window.dispatchEvent(new Event('finance:budgets-sync'));
+      window.dispatchEvent(new Event('finance:recurring-sync'));
+
+      toast.success('Данные очищены');
+    } catch (error) {
+      console.error('Ошибка очистки данных:', error);
+      toast.error('Не удалось очистить данные');
+    } finally {
+      setResetLoading(false);
     }
   };
 
@@ -153,6 +195,18 @@ export function SettingsPage() {
               <span className="info-value">{user?.email}</span>
             </div>
           </div>
+        </Card>
+
+        <Card title="Опасная зона" className="settings-card">
+          <Button
+            type="button"
+            variant="danger"
+            disabled={resetLoading}
+            onClick={handleResetData}
+            fullWidth
+          >
+            {resetLoading ? 'Очистка...' : 'Очистить все мои данные'}
+          </Button>
         </Card>
       </div>
     </div>

@@ -159,14 +159,6 @@ export function DashboardPage() {
           </div>
         </Card>
 
-        <Card className="stat-card stat-card-balance">
-          <div className="stat-icon">📊</div>
-          <div className="stat-content">
-            <div className="stat-label">Баланс</div>
-            <div className="stat-value">{formatCurrencyShort(stats.balance)}</div>
-          </div>
-        </Card>
-
         <Card className="stat-card stat-card-total">
           <div className="stat-icon">💳</div>
           <div className="stat-content">

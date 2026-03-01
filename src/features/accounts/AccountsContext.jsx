@@ -18,6 +18,17 @@ export function AccountsProvider({ children }) {
     }
   }, [user]);
 
+  useEffect(() => {
+    if (!user) return undefined;
+
+    const handleDataRefresh = () => {
+      loadAccounts();
+    };
+
+    window.addEventListener('finance:accounts-sync', handleDataRefresh);
+    return () => window.removeEventListener('finance:accounts-sync', handleDataRefresh);
+  }, [user]);
+
   const loadAccounts = () => {
     try {
       const allAccounts = JSON.parse(localStorage.getItem(STORAGE_KEYS.ACCOUNTS) || '[]');
@@ -26,6 +37,7 @@ export function AccountsProvider({ children }) {
       // Приводим баланс к числу на всякий случай
       const normalized = userAccounts.map(acc => ({
         ...acc,
+        initialBalance: Number(acc.initialBalance ?? acc.balance) || 0,
         balance: Number(acc.balance) || 0,
       }));
 
@@ -44,6 +56,7 @@ export function AccountsProvider({ children }) {
 
       const normalized = newAccounts.map(acc => ({
         ...acc,
+        initialBalance: Number(acc.initialBalance ?? acc.balance) || 0,
         balance: Number(acc.balance) || 0,
       }));
 
@@ -65,6 +78,7 @@ export function AccountsProvider({ children }) {
       userId: user.id,
       name: data.name,
       type: data.type,
+      initialBalance: Number(data.initialBalance) || 0,
       balance: Number(data.initialBalance) || 0,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
@@ -84,8 +98,33 @@ export function AccountsProvider({ children }) {
   };
 
   const deleteAccount = (id) => {
-    const updated = accounts.filter(acc => acc.id !== id);
-    return saveAccounts(updated);
+    try {
+      const updatedAccounts = accounts.filter(acc => acc.id !== id);
+      const saveResult = saveAccounts(updatedAccounts);
+      if (!saveResult.success) return saveResult;
+
+      // Каскадно удаляем операции по удалённому счёту
+      const allOperations = JSON.parse(localStorage.getItem(STORAGE_KEYS.OPERATIONS) || '[]');
+      const filteredOperations = allOperations.filter(
+        op => !(op.userId === user.id && op.accountId === id)
+      );
+      localStorage.setItem(STORAGE_KEYS.OPERATIONS, JSON.stringify(filteredOperations));
+
+      // Каскадно удаляем рекуррентные операции по удалённому счёту
+      const allRecurring = JSON.parse(localStorage.getItem(STORAGE_KEYS.RECURRING) || '[]');
+      const filteredRecurring = allRecurring.filter(
+        op => !(op.userId === user.id && op.accountId === id)
+      );
+      localStorage.setItem(STORAGE_KEYS.RECURRING, JSON.stringify(filteredRecurring));
+
+      window.dispatchEvent(new Event('finance:accounts-sync'));
+      window.dispatchEvent(new Event('finance:operations-sync'));
+      window.dispatchEvent(new Event('finance:recurring-sync'));
+      return { success: true };
+    } catch (error) {
+      console.error('Ошибка каскадного удаления счёта:', error);
+      return { success: false, error: 'Не удалось удалить счёт' };
+    }
   };
 
   const getAccountById = (id) => accounts.find(acc => acc.id === id);
