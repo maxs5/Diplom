@@ -9,7 +9,11 @@
   border: none;
   border-radius: var(--radius-md);
   cursor: pointer;
-  transition: background var(--transition-base), color var(--transition-base), transform 0.15s ease, box-shadow 0.15s ease;
+  transition:
+    background var(--transition-base),
+    color var(--transition-base),
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
   font-family: inherit;
   font-size: inherit;
   user-select: none;
@@ -20,7 +24,12 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(120deg, transparent 20%, rgba(255, 255, 255, 0.32) 50%, transparent 80%);
+  background: linear-gradient(
+    120deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.32) 50%,
+    transparent 80%
+  );
   transform: translateX(-130%);
   transition: transform 0.5s ease;
   pointer-events: none;

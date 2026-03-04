@@ -1,16 +1,16 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const budgetSchema = new mongoose.Schema(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
       required: true,
       index: true,
     },
     categoryId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Category',
+      ref: "Category",
       required: true,
       index: true,
     },
@@ -21,8 +21,8 @@ const budgetSchema = new mongoose.Schema(
     },
     period: {
       type: String,
-      enum: ['weekly', 'monthly', 'yearly'],
-      default: 'monthly',
+      enum: ["weekly", "monthly", "yearly"],
+      default: "monthly",
       index: true,
     },
     spent: {
@@ -31,7 +31,8 @@ const budgetSchema = new mongoose.Schema(
       min: 0,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-module.exports = mongoose.models.Budget || mongoose.model('Budget', budgetSchema);
+module.exports =
+  mongoose.models.Budget || mongoose.model("Budget", budgetSchema);

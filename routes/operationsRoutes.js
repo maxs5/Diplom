@@ -1,14 +1,15 @@
-const express = require('express');
+const express = require("express");
 const {
   createOperation,
   updateOperation,
   removeOperation,
-} = require('../controllers/operationsController');
+} = require("../controllers/operationsController");
+const { authMiddleware } = require("../middleware/authMiddleware");
 
 const router = express.Router();
 
-router.post('/', createOperation);
-router.put('/:id', updateOperation);
-router.delete('/:id', removeOperation);
+router.post("/", authMiddleware, createOperation);
+router.put("/:id", authMiddleware, updateOperation);
+router.delete("/:id", authMiddleware, removeOperation);
 
 module.exports = router;

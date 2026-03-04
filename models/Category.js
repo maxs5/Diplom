@@ -1,10 +1,10 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const categorySchema = new mongoose.Schema(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
       required: true,
       index: true,
     },
@@ -15,17 +15,18 @@ const categorySchema = new mongoose.Schema(
     },
     type: {
       type: String,
-      enum: ['income', 'expense'],
+      enum: ["income", "expense"],
       required: true,
       index: true,
     },
     icon: {
       type: String,
-      default: 'other',
+      default: "other",
       trim: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-module.exports = mongoose.models.Category || mongoose.model('Category', categorySchema);
+module.exports =
+  mongoose.models.Category || mongoose.model("Category", categorySchema);

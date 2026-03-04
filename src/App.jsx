@@ -1,15 +1,15 @@
-import React, { Suspense } from 'react';
-import { BrowserRouter } from 'react-router-dom';
-import { Toaster } from 'sonner';
-import { Loader } from './components/common/Loader.jsx';
-import { AppProviders } from './app/AppProviders.jsx';
-import { AppRoutes } from './app/AppRoutes.jsx';
+import React, { Suspense } from "react";
+import { BrowserRouter } from "react-router-dom";
+import { Toaster } from "sonner";
+import { Loader } from "./components/common/Loader.jsx";
+import { AppProviders } from "./app/AppProviders.jsx";
+import { AppRoutes } from "./app/AppRoutes.jsx";
 
 // Глобальные стили
-import './styles/globals.css';
+import "./styles/globals.css";
 
 // Демо-данные для тестирования
-import './utils/setupDemoData.js';
+import "./utils/setupDemoData.js";
 
 function App() {
   return (

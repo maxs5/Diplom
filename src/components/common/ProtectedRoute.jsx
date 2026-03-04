@@ -1,14 +1,14 @@
 /**
  * Компонент защищённого маршрута
- * 
+ *
  * Проверяет, авторизован ли пользователь.
  * Если нет - перенаправляет на страницу входа
  */
 
-import React from 'react';
-import { Navigate } from 'react-router-dom';
-import { useAuth } from '../../features/auth/AuthContext.jsx';
-import { Loader } from './Loader.jsx';
+import React from "react";
+import { Navigate } from "react-router-dom";
+import { useAuth } from "../../features/auth/AuthContext.jsx";
+import { Loader } from "./Loader.jsx";
 
 /**
  * @param {Object} props

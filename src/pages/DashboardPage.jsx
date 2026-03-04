@@ -1,6 +1,6 @@
 /**
  * Главная страница (Dashboard)
- * 
+ *
  * Отображает:
  * - Общую статистику (доходы, расходы, баланс)
  * - Счета пользователя
@@ -8,17 +8,17 @@
  * - Графики аналитики
  */
 
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAccounts } from '../features/accounts/AccountsContext.jsx';
-import { useCategories } from '../features/categories/CategoriesContext.jsx';
-import { useOperations } from '../features/operations/OperationsContext.jsx';
-import { Loader } from '../components/common/Loader.jsx';
-import { Card } from '../components/ui/Card.jsx';
-import { Button } from '../components/ui/Button.jsx';
-import { formatCurrency, formatCurrencyShort } from '../utils/currency.js';
-import { startOfMonth, endOfMonth, startOfYear } from '../utils/date.js';
-import { ACCOUNT_TYPES, CATEGORY_ICONS } from '../data/constants.js';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAccounts } from "../features/accounts/AccountsContext.jsx";
+import { useCategories } from "../features/categories/CategoriesContext.jsx";
+import { useOperations } from "../features/operations/OperationsContext.jsx";
+import { Loader } from "../components/common/Loader.jsx";
+import { Card } from "../components/ui/Card.jsx";
+import { Button } from "../components/ui/Button.jsx";
+import { formatCurrency, formatCurrencyShort } from "../utils/currency.js";
+import { startOfMonth, endOfMonth, startOfYear } from "../utils/date.js";
+import { ACCOUNT_TYPES, CATEGORY_ICONS } from "../data/constants.js";
 import {
   BarChart,
   Bar,
@@ -31,8 +31,8 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-} from 'recharts';
-import './DashboardPage.css';
+} from "recharts";
+import "./DashboardPage.css";
 
 export function DashboardPage() {
   const navigate = useNavigate();
@@ -41,17 +41,18 @@ export function DashboardPage() {
   const { operations, getStats, loading: operationsLoading } = useOperations();
 
   // Фильтр периода (месяц/год)
-  const [period, setPeriod] = useState('month');
+  const [period, setPeriod] = useState("month");
 
   /**
    * Получаем статистику за выбранный период
    */
   const getPeriodStats = () => {
     const now = new Date();
-    const filters = period === 'month'
-      ? { dateFrom: startOfMonth(now), dateTo: endOfMonth(now) }
-      : { dateFrom: startOfYear(now), dateTo: now };
-    
+    const filters =
+      period === "month"
+        ? { dateFrom: startOfMonth(now), dateTo: endOfMonth(now) }
+        : { dateFrom: startOfYear(now), dateTo: now };
+
     return getStats(filters);
   };
 
@@ -61,11 +62,11 @@ export function DashboardPage() {
    * Данные для графика расходов по категориям
    */
   const getExpensesByCategory = () => {
-    const expenseOps = operations.filter(op => op.type === 'expense');
-    
+    const expenseOps = operations.filter((op) => op.type === "expense");
+
     const categoryTotals = {};
-    expenseOps.forEach(op => {
-      const category = categories.find(c => c.id === op.categoryId);
+    expenseOps.forEach((op) => {
+      const category = categories.find((c) => c.id === op.categoryId);
       if (category) {
         if (!categoryTotals[category.name]) {
           categoryTotals[category.name] = 0;
@@ -73,7 +74,7 @@ export function DashboardPage() {
         categoryTotals[category.name] += op.amount;
       }
     });
-    
+
     return Object.entries(categoryTotals)
       .map(([name, value]) => ({ name, value }))
       .sort((a, b) => b.value - a.value)
@@ -86,25 +87,25 @@ export function DashboardPage() {
   const getMonthlyData = () => {
     const months = [];
     const now = new Date();
-    
+
     // Последние 6 месяцев
     for (let i = 5; i >= 0; i--) {
       const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
       const start = startOfMonth(date);
       const end = endOfMonth(date);
-      
+
       const monthStats = getStats({
         dateFrom: start,
         dateTo: end,
       });
-      
+
       months.push({
-        name: date.toLocaleDateString('ru-RU', { month: 'short' }),
+        name: date.toLocaleDateString("ru-RU", { month: "short" }),
         Доходы: monthStats.income,
         Расходы: monthStats.expense,
       });
     }
-    
+
     return months;
   };
 
@@ -116,7 +117,7 @@ export function DashboardPage() {
   }
 
   // Цвета для pie chart
-  const COLORS = ['#6366f1', '#8b5cf6', '#ec4899', '#f59e0b', '#10b981'];
+  const COLORS = ["#6366f1", "#8b5cf6", "#ec4899", "#f59e0b", "#10b981"];
 
   return (
     <div className="dashboard">
@@ -125,16 +126,16 @@ export function DashboardPage() {
         <h1>Главная</h1>
         <div className="dashboard-period">
           <Button
-            variant={period === 'month' ? 'primary' : 'secondary'}
+            variant={period === "month" ? "primary" : "secondary"}
             size="sm"
-            onClick={() => setPeriod('month')}
+            onClick={() => setPeriod("month")}
           >
             Месяц
           </Button>
           <Button
-            variant={period === 'year' ? 'primary' : 'secondary'}
+            variant={period === "year" ? "primary" : "secondary"}
             size="sm"
-            onClick={() => setPeriod('year')}
+            onClick={() => setPeriod("year")}
           >
             Год
           </Button>
@@ -147,7 +148,9 @@ export function DashboardPage() {
           <div className="stat-icon">💰</div>
           <div className="stat-content">
             <div className="stat-label">Доходы</div>
-            <div className="stat-value">{formatCurrencyShort(stats.income)}</div>
+            <div className="stat-value">
+              {formatCurrencyShort(stats.income)}
+            </div>
           </div>
         </Card>
 
@@ -155,7 +158,9 @@ export function DashboardPage() {
           <div className="stat-icon">💸</div>
           <div className="stat-content">
             <div className="stat-label">Расходы</div>
-            <div className="stat-value">{formatCurrencyShort(stats.expense)}</div>
+            <div className="stat-value">
+              {formatCurrencyShort(stats.expense)}
+            </div>
           </div>
         </Card>
 
@@ -163,7 +168,9 @@ export function DashboardPage() {
           <div className="stat-icon">💳</div>
           <div className="stat-content">
             <div className="stat-label">Всего на счетах</div>
-            <div className="stat-value">{formatCurrencyShort(getTotalBalance())}</div>
+            <div className="stat-value">
+              {formatCurrencyShort(getTotalBalance())}
+            </div>
           </div>
         </Card>
       </div>
@@ -201,7 +208,10 @@ export function DashboardPage() {
                   dataKey="value"
                 >
                   {expenseData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
                   ))}
                 </Pie>
                 <Tooltip formatter={(value) => formatCurrency(value)} />
@@ -219,22 +229,26 @@ export function DashboardPage() {
       <Card
         title="Мои счета"
         headerAction={
-          <Button size="sm" onClick={() => navigate('/accounts/new')}>
+          <Button size="sm" onClick={() => navigate("/accounts/new")}>
             + Добавить
           </Button>
         }
       >
         {accounts.length > 0 ? (
           <div className="accounts-grid">
-            {accounts.map(account => {
-              const accountType = ACCOUNT_TYPES.find(t => t.id === account.type);
+            {accounts.map((account) => {
+              const accountType = ACCOUNT_TYPES.find(
+                (t) => t.id === account.type,
+              );
               return (
                 <div
                   key={account.id}
                   className="account-item"
                   onClick={() => navigate(`/accounts/${account.id}`)}
                 >
-                  <div className="account-icon">{accountType?.icon || '💳'}</div>
+                  <div className="account-icon">
+                    {accountType?.icon || "💳"}
+                  </div>
                   <div className="account-info">
                     <div className="account-name">{account.name}</div>
                     <div className="account-type">{accountType?.label}</div>
@@ -249,7 +263,7 @@ export function DashboardPage() {
         ) : (
           <div className="empty-state">
             <p>У вас пока нет счетов</p>
-            <Button onClick={() => navigate('/accounts/new')}>
+            <Button onClick={() => navigate("/accounts/new")}>
               Создать первый счёт
             </Button>
           </div>
@@ -260,25 +274,25 @@ export function DashboardPage() {
       <Card
         title="Категории"
         headerAction={
-          <Button size="sm" onClick={() => navigate('/categories/new')}>
+          <Button size="sm" onClick={() => navigate("/categories/new")}>
             + Добавить
           </Button>
         }
       >
         {categories.length > 0 ? (
           <div className="categories-grid">
-            {categories.slice(0, 8).map(category => {
-              const icon = CATEGORY_ICONS.find(i => i.id === category.icon);
+            {categories.slice(0, 8).map((category) => {
+              const icon = CATEGORY_ICONS.find((i) => i.id === category.icon);
               return (
                 <div
                   key={category.id}
                   className="category-item"
                   onClick={() => navigate(`/categories/${category.id}`)}
                 >
-                  <div className="category-icon">{icon?.emoji || '📌'}</div>
+                  <div className="category-icon">{icon?.emoji || "📌"}</div>
                   <div className="category-name">{category.name}</div>
                   <div className={`category-type ${category.type}`}>
-                    {category.type === 'income' ? 'Доход' : 'Расход'}
+                    {category.type === "income" ? "Доход" : "Расход"}
                   </div>
                 </div>
               );
@@ -293,7 +307,7 @@ export function DashboardPage() {
         ) : (
           <div className="empty-state">
             <p>У вас пока нет категорий</p>
-            <Button onClick={() => navigate('/categories/new')}>
+            <Button onClick={() => navigate("/categories/new")}>
               Создать первую категорию
             </Button>
           </div>

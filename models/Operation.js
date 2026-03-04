@@ -1,28 +1,28 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const operationSchema = new mongoose.Schema(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
       required: true,
       index: true,
     },
     accountId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Account',
+      ref: "Account",
       required: true,
       index: true,
     },
     categoryId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Category',
+      ref: "Category",
       required: true,
       index: true,
     },
     type: {
       type: String,
-      enum: ['income', 'expense'],
+      enum: ["income", "expense"],
       required: true,
       index: true,
     },
@@ -38,11 +38,12 @@ const operationSchema = new mongoose.Schema(
     },
     comment: {
       type: String,
-      default: '',
+      default: "",
       trim: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
-module.exports = mongoose.models.Operation || mongoose.model('Operation', operationSchema);
+module.exports =
+  mongoose.models.Operation || mongoose.model("Operation", operationSchema);

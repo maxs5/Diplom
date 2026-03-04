@@ -6,7 +6,10 @@
   overflow: hidden;
   box-shadow: var(--card-shadow);
   border: 1px solid var(--card-border);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background var(--transition-base);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background var(--transition-base);
 }
 
 .card::before {
@@ -15,7 +18,11 @@
   inset: 0;
   pointer-events: none;
   border-radius: 12px;
-  background: linear-gradient(155deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0));
+  background: linear-gradient(
+    155deg,
+    rgba(255, 255, 255, 0.35),
+    rgba(255, 255, 255, 0)
+  );
 }
 
 .card:hover {
@@ -54,7 +61,10 @@
   background: var(--card-action-btn-bg);
   color: var(--card-action-btn-text);
   box-shadow: var(--card-action-btn-shadow);
-  transition: transform 0.15s ease, box-shadow 0.15s ease, background var(--transition-base);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    background var(--transition-base);
 }
 
 .card-header-action button:hover {

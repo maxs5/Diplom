@@ -1,11 +1,11 @@
 /**
  * Компонент пустого состояния
- * 
+ *
  * Показывается когда нет данных для отображения
  */
 
-import React from 'react';
-import './EmptyState.css';
+import React from "react";
+import "./EmptyState.css";
 
 /**
  * @param {Object} props
@@ -14,7 +14,13 @@ import './EmptyState.css';
  * @param {string} props.description - Описание
  * @param {React.ReactNode} props.action - Кнопка действия
  */
-export function EmptyState({ icon = '📭', title, description, action, className = '' }) {
+export function EmptyState({
+  icon = "📭",
+  title,
+  description,
+  action,
+  className = "",
+}) {
   return (
     <div className={`empty-state ${className}`}>
       <div className="empty-state-icon">{icon}</div>

@@ -1,32 +1,32 @@
 /**
  * Страница настроек
- * 
+ *
  * Позволяет пользователю:
  * - Изменить имя
  * - Изменить email
  * - Выбрать валюту
  */
 
-import React, { useState } from 'react';
-import { toast } from 'sonner';
-import { useAuth } from '../features/auth/AuthContext.jsx';
-import { Card } from '../components/ui/Card.jsx';
-import { Button } from '../components/ui/Button.jsx';
-import { Input } from '../components/ui/Input.jsx';
-import { Select } from '../components/ui/Select.jsx';
-import { Spinner } from '../components/ui/Spinner.jsx';
-import { CURRENCIES } from '../data/constants.js';
-import { STORAGE_KEYS } from '../data/constants.js';
-import './SettingsPage.css';
+import React, { useState } from "react";
+import { toast } from "sonner";
+import { useAuth } from "../features/auth/AuthContext.jsx";
+import { Card } from "../components/ui/Card.jsx";
+import { Button } from "../components/ui/Button.jsx";
+import { Input } from "../components/ui/Input.jsx";
+import { Select } from "../components/ui/Select.jsx";
+import { Spinner } from "../components/ui/Spinner.jsx";
+import { CURRENCIES } from "../data/constants.js";
+import { STORAGE_KEYS } from "../data/constants.js";
+import "./SettingsPage.css";
 
 export function SettingsPage() {
   const { user, updateProfile } = useAuth();
 
   // Состояние формы
   const [formData, setFormData] = useState({
-    name: user?.name || '',
-    email: user?.email || '',
-    currency: user?.currency || 'RUB',
+    name: user?.name || "",
+    email: user?.email || "",
+    currency: user?.currency || "RUB",
   });
 
   const [errors, setErrors] = useState({});
@@ -37,9 +37,9 @@ export function SettingsPage() {
    * Обработчик изменения
    */
   const handleChange = (field, value) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
     if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: undefined }));
+      setErrors((prev) => ({ ...prev, [field]: undefined }));
     }
   };
 
@@ -50,13 +50,13 @@ export function SettingsPage() {
     const newErrors = {};
 
     if (!formData.name.trim()) {
-      newErrors.name = 'Введите имя';
+      newErrors.name = "Введите имя";
     }
 
     if (!formData.email.trim()) {
-      newErrors.email = 'Введите email';
+      newErrors.email = "Введите email";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Введите корректный email';
+      newErrors.email = "Введите корректный email";
     }
 
     setErrors(newErrors);
@@ -70,23 +70,23 @@ export function SettingsPage() {
     e.preventDefault();
 
     if (!validate()) {
-      toast.error('Исправьте ошибки в форме');
+      toast.error("Исправьте ошибки в форме");
       return;
     }
 
     setLoading(true);
-    
+
     // Небольшая задержка для UX
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 500));
 
     const result = await updateProfile(formData);
-    
+
     setLoading(false);
 
     if (result.success) {
-      toast.success('Настройки сохранены');
+      toast.success("Настройки сохранены");
     } else {
-      toast.error(result.error || 'Не удалось сохранить настройки');
+      toast.error(result.error || "Не удалось сохранить настройки");
     }
   };
 
@@ -94,7 +94,7 @@ export function SettingsPage() {
     if (!user?.id) return;
 
     const confirmed = window.confirm(
-      'Удалить все ваши счета, категории, операции, бюджеты и автоплатежи?'
+      "Удалить все ваши счета, категории, операции, бюджеты и автоплатежи?",
     );
     if (!confirmed) return;
 
@@ -110,21 +110,23 @@ export function SettingsPage() {
       ];
 
       keysToClear.forEach((key) => {
-        const allItems = JSON.parse(localStorage.getItem(key) || '[]');
-        const onlyOtherUsers = allItems.filter((item) => item.userId !== user.id);
+        const allItems = JSON.parse(localStorage.getItem(key) || "[]");
+        const onlyOtherUsers = allItems.filter(
+          (item) => item.userId !== user.id,
+        );
         localStorage.setItem(key, JSON.stringify(onlyOtherUsers));
       });
 
-      window.dispatchEvent(new Event('finance:accounts-sync'));
-      window.dispatchEvent(new Event('finance:categories-sync'));
-      window.dispatchEvent(new Event('finance:operations-sync'));
-      window.dispatchEvent(new Event('finance:budgets-sync'));
-      window.dispatchEvent(new Event('finance:recurring-sync'));
+      window.dispatchEvent(new Event("finance:accounts-sync"));
+      window.dispatchEvent(new Event("finance:categories-sync"));
+      window.dispatchEvent(new Event("finance:operations-sync"));
+      window.dispatchEvent(new Event("finance:budgets-sync"));
+      window.dispatchEvent(new Event("finance:recurring-sync"));
 
-      toast.success('Данные очищены');
+      toast.success("Данные очищены");
     } catch (error) {
-      console.error('Ошибка очистки данных:', error);
-      toast.error('Не удалось очистить данные');
+      console.error("Ошибка очистки данных:", error);
+      toast.error("Не удалось очистить данные");
     } finally {
       setResetLoading(false);
     }
@@ -143,7 +145,7 @@ export function SettingsPage() {
               label="Имя"
               type="text"
               value={formData.name}
-              onChange={(e) => handleChange('name', e.target.value)}
+              onChange={(e) => handleChange("name", e.target.value)}
               error={errors.name}
               required
               icon={<span>👤</span>}
@@ -154,7 +156,7 @@ export function SettingsPage() {
               label="Email"
               type="email"
               value={formData.email}
-              onChange={(e) => handleChange('email', e.target.value)}
+              onChange={(e) => handleChange("email", e.target.value)}
               error={errors.email}
               required
               icon={<span>✉️</span>}
@@ -164,21 +166,34 @@ export function SettingsPage() {
             <Select
               label="Валюта"
               value={formData.currency}
-              onChange={(e) => handleChange('currency', e.target.value)}
-              options={CURRENCIES.map(curr => ({
+              onChange={(e) => handleChange("currency", e.target.value)}
+              options={CURRENCIES.map((curr) => ({
                 value: curr.id,
                 label: `${curr.symbol} ${curr.label}`,
               }))}
             />
 
             {/* Кнопка сохранения */}
-            <Button type="submit" variant="primary" disabled={loading} fullWidth>
+            <Button
+              type="submit"
+              variant="primary"
+              disabled={loading}
+              fullWidth
+            >
               {loading ? (
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+                <span
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "8px",
+                  }}
+                >
                   <Spinner size="sm" />
                   Сохранение...
                 </span>
-              ) : 'Сохранить изменения'}
+              ) : (
+                "Сохранить изменения"
+              )}
             </Button>
           </form>
         </Card>
@@ -205,7 +220,7 @@ export function SettingsPage() {
             onClick={handleResetData}
             fullWidth
           >
-            {resetLoading ? 'Очистка...' : 'Очистить все мои данные'}
+            {resetLoading ? "Очистка..." : "Очистить все мои данные"}
           </Button>
         </Card>
       </div>

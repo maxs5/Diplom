@@ -1,24 +1,24 @@
 /**
  * Контекст авторизации
- * 
+ *
  * Управляет состоянием авторизации пользователя:
  * - Вход (login)
  * - Регистрация (register)
  * - Выход (logout)
  * - Обновление профиля (updateProfile)
- * 
+ *
  * Данные сохраняются в localStorage
  */
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { STORAGE_KEYS, DEFAULT_CATEGORIES } from '../../data/constants.js';
-import { Loader } from '../../components/common/Loader.jsx';
-import { setUser, clearUser } from '../../store/authSlice.js';
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { STORAGE_KEYS, DEFAULT_CATEGORIES } from "../../data/constants.js";
+import { Loader } from "../../components/common/Loader.jsx";
+import { setUser, clearUser } from "../../store/authSlice.js";
 
 // Создаём контекст
 const AuthContext = createContext(null);
-const TOKEN_STORAGE_KEY = 'financeApp_token';
+const TOKEN_STORAGE_KEY = "financeApp_token";
 
 /**
  * Провайдер контекста авторизации
@@ -27,7 +27,7 @@ const TOKEN_STORAGE_KEY = 'financeApp_token';
 export function AuthProvider({ children }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
-  
+
   // Флаг загрузки (проверяем localStorage при старте)
   const [loading, setLoading] = useState(true);
 
@@ -62,14 +62,14 @@ export function AuthProvider({ children }) {
           return;
         }
 
-        const response = await fetch('/api/auth/me', {
+        const response = await fetch("/api/auth/me", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
         if (response.status === 401) {
-          throw new Error('UNAUTHORIZED');
+          throw new Error("UNAUTHORIZED");
         }
 
         if (!response.ok) {
@@ -77,7 +77,7 @@ export function AuthProvider({ children }) {
             dispatch(setUser(savedUser));
             return;
           }
-          throw new Error('SESSION_CHECK_FAILED');
+          throw new Error("SESSION_CHECK_FAILED");
         }
 
         let data;
@@ -94,8 +94,8 @@ export function AuthProvider({ children }) {
         dispatch(setUser(data.user));
         localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(data.user));
       } catch (error) {
-        console.error('Ошибка загрузки пользователя:', error);
-        if (error.message === 'UNAUTHORIZED') {
+        console.error("Ошибка загрузки пользователя:", error);
+        if (error.message === "UNAUTHORIZED") {
           localStorage.removeItem(TOKEN_STORAGE_KEY);
           localStorage.removeItem(STORAGE_KEYS.USER);
           dispatch(clearUser());
@@ -120,27 +120,30 @@ export function AuthProvider({ children }) {
    */
   const login = async (email, password) => {
     try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, password }),
       });
 
       const data = await parseJsonSafe(response);
       if (!response.ok) {
-        return { success: false, error: data.error || 'Неверный email или пароль' };
+        return {
+          success: false,
+          error: data.error || "Неверный email или пароль",
+        };
       }
 
       dispatch(setUser(data.user));
       localStorage.setItem(TOKEN_STORAGE_KEY, data.token);
       localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(data.user));
-      
+
       return { success: true };
     } catch (error) {
-      console.error('Ошибка входа:', error);
-      return { success: false, error: 'Произошла ошибка при входе' };
+      console.error("Ошибка входа:", error);
+      return { success: false, error: "Произошла ошибка при входе" };
     }
   };
 
@@ -153,17 +156,17 @@ export function AuthProvider({ children }) {
     try {
       const { email, password, name } = data;
 
-      const response = await fetch('/api/auth/register', {
-        method: 'POST',
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, password, name }),
       });
 
       const result = await parseJsonSafe(response);
       if (!response.ok) {
-        return { success: false, error: result.error || 'Ошибка регистрации' };
+        return { success: false, error: result.error || "Ошибка регистрации" };
       }
 
       createDefaultCategories(result.user.id);
@@ -171,11 +174,11 @@ export function AuthProvider({ children }) {
       dispatch(setUser(result.user));
       localStorage.setItem(TOKEN_STORAGE_KEY, result.token);
       localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(result.user));
-      
+
       return { success: true };
     } catch (error) {
-      console.error('Ошибка регистрации:', error);
-      return { success: false, error: 'Произошла ошибка при регистрации' };
+      console.error("Ошибка регистрации:", error);
+      return { success: false, error: "Произошла ошибка при регистрации" };
     }
   };
 
@@ -184,9 +187,11 @@ export function AuthProvider({ children }) {
    */
   const createDefaultCategories = (userId) => {
     try {
-      const categories = JSON.parse(localStorage.getItem(STORAGE_KEYS.CATEGORIES) || '[]');
-      
-      const newCategories = DEFAULT_CATEGORIES.map(cat => ({
+      const categories = JSON.parse(
+        localStorage.getItem(STORAGE_KEYS.CATEGORIES) || "[]",
+      );
+
+      const newCategories = DEFAULT_CATEGORIES.map((cat) => ({
         id: `${userId}_${Date.now()}_${Math.random()}`,
         userId,
         name: cat.name,
@@ -194,11 +199,11 @@ export function AuthProvider({ children }) {
         icon: cat.icon,
         createdAt: new Date().toISOString(),
       }));
-      
+
       categories.push(...newCategories);
       localStorage.setItem(STORAGE_KEYS.CATEGORIES, JSON.stringify(categories));
     } catch (error) {
-      console.error('Ошибка создания дефолтных категорий:', error);
+      console.error("Ошибка создания дефолтных категорий:", error);
     }
   };
 
@@ -219,13 +224,13 @@ export function AuthProvider({ children }) {
     try {
       const token = localStorage.getItem(TOKEN_STORAGE_KEY);
       if (!token) {
-        return { success: false, error: 'Сессия истекла. Войдите снова.' };
+        return { success: false, error: "Сессия истекла. Войдите снова." };
       }
 
-      const response = await fetch('/api/users/me', {
-        method: 'PUT',
+      const response = await fetch("/api/users/me", {
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(updates),
@@ -233,7 +238,10 @@ export function AuthProvider({ children }) {
 
       const data = await parseJsonSafe(response);
       if (!response.ok) {
-        return { success: false, error: data.error || 'Не удалось обновить профиль' };
+        return {
+          success: false,
+          error: data.error || "Не удалось обновить профиль",
+        };
       }
 
       dispatch(setUser(data.user));
@@ -241,19 +249,19 @@ export function AuthProvider({ children }) {
 
       return { success: true };
     } catch (error) {
-      console.error('Ошибка обновления профиля:', error);
-      return { success: false, error: 'Не удалось обновить профиль' };
+      console.error("Ошибка обновления профиля:", error);
+      return { success: false, error: "Не удалось обновить профиль" };
     }
   };
 
   // Значение контекста, доступное всем компонентам
   const value = {
-    user,           // Текущий пользователь (или null)
-    loading,        // Идёт ли загрузка
-    login,          // Функция входа
-    register,       // Функция регистрации
-    logout,         // Функция выхода
-    updateProfile,  // Функция обновления профиля
+    user, // Текущий пользователь (или null)
+    loading, // Идёт ли загрузка
+    login, // Функция входа
+    register, // Функция регистрации
+    logout, // Функция выхода
+    updateProfile, // Функция обновления профиля
     isAuthenticated: !!user, // Авторизован ли пользователь
   };
 
@@ -262,11 +270,7 @@ export function AuthProvider({ children }) {
     return <Loader text="Инициализация сессии..." fullScreen />;
   }
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 /**
@@ -275,10 +279,10 @@ export function AuthProvider({ children }) {
  */
 export function useAuth() {
   const context = useContext(AuthContext);
-  
+
   if (!context) {
-    throw new Error('useAuth должен использоваться внутри AuthProvider');
+    throw new Error("useAuth должен использоваться внутри AuthProvider");
   }
-  
+
   return context;
 }

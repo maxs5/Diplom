@@ -1,28 +1,28 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const recurringOperationSchema = new mongoose.Schema(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: "User",
       required: true,
       index: true,
     },
     accountId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Account',
+      ref: "Account",
       required: true,
       index: true,
     },
     categoryId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Category',
+      ref: "Category",
       required: true,
       index: true,
     },
     type: {
       type: String,
-      enum: ['income', 'expense'],
+      enum: ["income", "expense"],
       required: true,
       index: true,
     },
@@ -33,12 +33,12 @@ const recurringOperationSchema = new mongoose.Schema(
     },
     comment: {
       type: String,
-      default: '',
+      default: "",
       trim: true,
     },
     interval: {
       type: String,
-      enum: ['daily', 'weekly', 'monthly', 'yearly'],
+      enum: ["daily", "weekly", "monthly", "yearly"],
       required: true,
       index: true,
     },
@@ -57,9 +57,9 @@ const recurringOperationSchema = new mongoose.Schema(
       index: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 module.exports =
   mongoose.models.RecurringOperation ||
-  mongoose.model('RecurringOperation', recurringOperationSchema);
+  mongoose.model("RecurringOperation", recurringOperationSchema);

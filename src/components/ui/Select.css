@@ -27,7 +27,9 @@
   background-position:
     calc(100% - 16px) calc(50% + 1px),
     calc(100% - 11px) calc(50% + 1px);
-  background-size: 6px 6px, 6px 6px;
+  background-size:
+    6px 6px,
+    6px 6px;
   background-repeat: no-repeat;
   transition:
     border var(--transition-base),

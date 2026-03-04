@@ -2,30 +2,36 @@
  * Страница формы счёта (создание/редактирование)
  */
 
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { toast } from 'sonner';
-import { useAccounts } from '../features/accounts/AccountsContext.jsx';
-import { Loader } from '../components/common/Loader.jsx';
-import { Card } from '../components/ui/Card.jsx';
-import { Button } from '../components/ui/Button.jsx';
-import { Input } from '../components/ui/Input.jsx';
-import { Select } from '../components/ui/Select.jsx';
-import { ACCOUNT_TYPES } from '../data/constants.js';
-import './OperationFormPage.css'; // Используем те же стили
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "sonner";
+import { useAccounts } from "../features/accounts/AccountsContext.jsx";
+import { Loader } from "../components/common/Loader.jsx";
+import { Card } from "../components/ui/Card.jsx";
+import { Button } from "../components/ui/Button.jsx";
+import { Input } from "../components/ui/Input.jsx";
+import { Select } from "../components/ui/Select.jsx";
+import { ACCOUNT_TYPES } from "../data/constants.js";
+import "./OperationFormPage.css"; // Используем те же стили
 
 export function AccountFormPage() {
   const navigate = useNavigate();
   const { id } = useParams();
   const isEdit = !!id;
 
-  const { createAccount, updateAccount, deleteAccount, getAccountById, loading } = useAccounts();
+  const {
+    createAccount,
+    updateAccount,
+    deleteAccount,
+    getAccountById,
+    loading,
+  } = useAccounts();
 
   // Состояние формы
   const [formData, setFormData] = useState({
-    name: '',
-    type: 'card',
-    initialBalance: '0',
+    name: "",
+    type: "card",
+    initialBalance: "0",
   });
 
   const [errors, setErrors] = useState({});
@@ -44,11 +50,11 @@ export function AccountFormPage() {
         setFormData({
           name: account.name,
           type: account.type,
-          initialBalance: account.balance?.toString() || '0',
+          initialBalance: account.balance?.toString() || "0",
         });
       } else {
-        toast.error('Счёт не найден');
-        navigate('/');
+        toast.error("Счёт не найден");
+        navigate("/");
       }
     }
   }, [id, isEdit, loading, getAccountById, navigate]);
@@ -61,9 +67,9 @@ export function AccountFormPage() {
    * Обработчик изменения
    */
   const handleChange = (field, value) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
     if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: undefined }));
+      setErrors((prev) => ({ ...prev, [field]: undefined }));
     }
   };
 
@@ -74,15 +80,15 @@ export function AccountFormPage() {
     const newErrors = {};
 
     if (!formData.name.trim()) {
-      newErrors.name = 'Введите название счёта';
+      newErrors.name = "Введите название счёта";
     }
 
     if (!formData.type) {
-      newErrors.type = 'Выберите тип счёта';
+      newErrors.type = "Выберите тип счёта";
     }
 
-    if (formData.initialBalance === '') {
-      newErrors.initialBalance = 'Введите начальный баланс';
+    if (formData.initialBalance === "") {
+      newErrors.initialBalance = "Введите начальный баланс";
     }
 
     setErrors(newErrors);
@@ -96,7 +102,7 @@ export function AccountFormPage() {
     e.preventDefault();
 
     if (!validate()) {
-      toast.error('Заполните все поля');
+      toast.error("Заполните все поля");
       return;
     }
 
@@ -105,8 +111,8 @@ export function AccountFormPage() {
       : createAccount(formData);
 
     if (result.success) {
-      toast.success(isEdit ? 'Счёт обновлён' : 'Счёт создан');
-      navigate('/');
+      toast.success(isEdit ? "Счёт обновлён" : "Счёт создан");
+      navigate("/");
     } else {
       toast.error(result.error);
     }
@@ -116,11 +122,11 @@ export function AccountFormPage() {
    * Удаление счёта
    */
   const handleDelete = () => {
-    if (window.confirm('Вы уверены? Это действие нельзя отменить.')) {
+    if (window.confirm("Вы уверены? Это действие нельзя отменить.")) {
       const result = deleteAccount(id);
       if (result.success) {
-        toast.success('Счёт удалён');
-        navigate('/');
+        toast.success("Счёт удалён");
+        navigate("/");
       } else {
         toast.error(result.error);
       }
@@ -130,8 +136,8 @@ export function AccountFormPage() {
   return (
     <div className="operation-form-page">
       <div className="form-header">
-        <h1>{isEdit ? 'Редактировать счёт' : 'Новый счёт'}</h1>
-        <Button variant="secondary" onClick={() => navigate('/')}>
+        <h1>{isEdit ? "Редактировать счёт" : "Новый счёт"}</h1>
+        <Button variant="secondary" onClick={() => navigate("/")}>
           Отмена
         </Button>
       </div>
@@ -143,7 +149,7 @@ export function AccountFormPage() {
             label="Название счёта"
             type="text"
             value={formData.name}
-            onChange={(e) => handleChange('name', e.target.value)}
+            onChange={(e) => handleChange("name", e.target.value)}
             placeholder="Например: Основная карта"
             error={errors.name}
             required
@@ -154,8 +160,8 @@ export function AccountFormPage() {
           <Select
             label="Тип счёта"
             value={formData.type}
-            onChange={(e) => handleChange('type', e.target.value)}
-            options={ACCOUNT_TYPES.map(type => ({
+            onChange={(e) => handleChange("type", e.target.value)}
+            options={ACCOUNT_TYPES.map((type) => ({
               value: type.id,
               label: `${type.icon} ${type.label}`,
             }))}
@@ -170,7 +176,7 @@ export function AccountFormPage() {
               type="number"
               step="0.01"
               value={formData.initialBalance}
-              onChange={(e) => handleChange('initialBalance', e.target.value)}
+              onChange={(e) => handleChange("initialBalance", e.target.value)}
               placeholder="0.00"
               error={errors.initialBalance}
               required
@@ -186,11 +192,15 @@ export function AccountFormPage() {
               </Button>
             )}
             <div style={{ flex: 1 }} />
-            <Button type="button" variant="secondary" onClick={() => navigate('/')}>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => navigate("/")}
+            >
               Отмена
             </Button>
             <Button type="submit" variant="primary">
-              {isEdit ? 'Сохранить' : 'Создать'}
+              {isEdit ? "Сохранить" : "Создать"}
             </Button>
           </div>
         </form>

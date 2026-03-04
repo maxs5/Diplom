@@ -1,42 +1,51 @@
 /**
  * Страница формы операции (создание/редактирование)
- * 
+ *
  * Позволяет:
  * - Создать новую операцию
  * - Редактировать существующую
  */
 
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { toast } from 'sonner';
-import { useOperations } from '../features/operations/OperationsContext.jsx';
-import { useAccounts } from '../features/accounts/AccountsContext.jsx';
-import { useCategories } from '../features/categories/CategoriesContext.jsx';
-import { Loader } from '../components/common/Loader.jsx';
-import { Card } from '../components/ui/Card.jsx';
-import { Button } from '../components/ui/Button.jsx';
-import { Input } from '../components/ui/Input.jsx';
-import { Select } from '../components/ui/Select.jsx';
-import { toInputDateFormat } from '../utils/date.js';
-import './OperationFormPage.css';
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "sonner";
+import { useOperations } from "../features/operations/OperationsContext.jsx";
+import { useAccounts } from "../features/accounts/AccountsContext.jsx";
+import { useCategories } from "../features/categories/CategoriesContext.jsx";
+import { Loader } from "../components/common/Loader.jsx";
+import { Card } from "../components/ui/Card.jsx";
+import { Button } from "../components/ui/Button.jsx";
+import { Input } from "../components/ui/Input.jsx";
+import { Select } from "../components/ui/Select.jsx";
+import { toInputDateFormat } from "../utils/date.js";
+import "./OperationFormPage.css";
 
 export function OperationFormPage() {
   const navigate = useNavigate();
   const { id } = useParams(); // ID операции (если редактирование)
   const isEdit = !!id;
 
-  const { createOperation, updateOperation, getOperationById, loading: operationsLoading } = useOperations();
+  const {
+    createOperation,
+    updateOperation,
+    getOperationById,
+    loading: operationsLoading,
+  } = useOperations();
   const { accounts, loading: accountsLoading } = useAccounts();
-  const { getIncomeCategories, getExpenseCategories, loading: categoriesLoading } = useCategories();
+  const {
+    getIncomeCategories,
+    getExpenseCategories,
+    loading: categoriesLoading,
+  } = useCategories();
 
   // Состояние формы
   const [formData, setFormData] = useState({
-    type: 'expense', // По умолчанию расход
-    accountId: '',
-    categoryId: '',
-    amount: '',
+    type: "expense", // По умолчанию расход
+    accountId: "",
+    categoryId: "",
+    amount: "",
     date: toInputDateFormat(new Date()),
-    comment: '',
+    comment: "",
   });
 
   // Ошибки валидации
@@ -58,12 +67,12 @@ export function OperationFormPage() {
           accountId: operation.accountId,
           categoryId: operation.categoryId,
           amount: operation.amount.toString(),
-          date: operation.date.split('T')[0], // Только дата
-          comment: operation.comment || '',
+          date: operation.date.split("T")[0], // Только дата
+          comment: operation.comment || "",
         });
       } else {
-        toast.error('Операция не найдена');
-        navigate('/operations');
+        toast.error("Операция не найдена");
+        navigate("/operations");
       }
     }
   }, [id, isEdit, operationsLoading, getOperationById, navigate]);
@@ -72,16 +81,16 @@ export function OperationFormPage() {
    * Обработчик изменения полей
    */
   const handleChange = (field, value) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-    
+    setFormData((prev) => ({ ...prev, [field]: value }));
+
     // Очищаем ошибку для этого поля
     if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: undefined }));
+      setErrors((prev) => ({ ...prev, [field]: undefined }));
     }
 
     // При смене типа сбрасываем категорию
-    if (field === 'type') {
-      setFormData(prev => ({ ...prev, categoryId: '' }));
+    if (field === "type") {
+      setFormData((prev) => ({ ...prev, categoryId: "" }));
     }
   };
 
@@ -92,28 +101,32 @@ export function OperationFormPage() {
     const newErrors = {};
 
     if (!formData.type) {
-      newErrors.type = 'Выберите тип операции';
+      newErrors.type = "Выберите тип операции";
     }
 
     if (!formData.accountId) {
-      newErrors.accountId = 'Выберите счёт';
+      newErrors.accountId = "Выберите счёт";
     }
 
     if (!formData.categoryId) {
-      newErrors.categoryId = 'Выберите категорию';
+      newErrors.categoryId = "Выберите категорию";
     }
 
-    if (formData.amount === '' || formData.amount === null || formData.amount === undefined) {
-      newErrors.amount = 'Введите сумму';
+    if (
+      formData.amount === "" ||
+      formData.amount === null ||
+      formData.amount === undefined
+    ) {
+      newErrors.amount = "Введите сумму";
     } else {
       const amountValue = Number(formData.amount);
       if (Number.isNaN(amountValue) || amountValue <= 0) {
-        newErrors.amount = 'Сумма должна быть больше 0';
+        newErrors.amount = "Сумма должна быть больше 0";
       }
     }
 
     if (!formData.date) {
-      newErrors.date = 'Выберите дату';
+      newErrors.date = "Выберите дату";
     }
 
     setErrors(newErrors);
@@ -127,7 +140,7 @@ export function OperationFormPage() {
     e.preventDefault();
 
     if (!validate()) {
-      toast.error('Заполните все обязательные поля');
+      toast.error("Заполните все обязательные поля");
       return;
     }
 
@@ -137,8 +150,8 @@ export function OperationFormPage() {
       : createOperation(formData);
 
     if (result.success) {
-      toast.success(isEdit ? 'Операция обновлена' : 'Операция создана');
-      navigate('/operations');
+      toast.success(isEdit ? "Операция обновлена" : "Операция создана");
+      navigate("/operations");
     } else {
       toast.error(result.error);
     }
@@ -147,9 +160,8 @@ export function OperationFormPage() {
   /**
    * Получаем категории в зависимости от типа
    */
-  const availableCategories = formData.type === 'income'
-    ? getIncomeCategories()
-    : getExpenseCategories();
+  const availableCategories =
+    formData.type === "income" ? getIncomeCategories() : getExpenseCategories();
 
   if (operationsLoading || accountsLoading || categoriesLoading) {
     return <Loader text="Загрузка формы операции..." />;
@@ -158,8 +170,8 @@ export function OperationFormPage() {
   return (
     <div className="operation-form-page">
       <div className="form-header">
-        <h1>{isEdit ? 'Редактировать операцию' : 'Новая операция'}</h1>
-        <Button variant="secondary" onClick={() => navigate('/operations')}>
+        <h1>{isEdit ? "Редактировать операцию" : "Новая операция"}</h1>
+        <Button variant="secondary" onClick={() => navigate("/operations")}>
           Отмена
         </Button>
       </div>
@@ -170,10 +182,10 @@ export function OperationFormPage() {
           <Select
             label="Тип операции"
             value={formData.type}
-            onChange={(e) => handleChange('type', e.target.value)}
+            onChange={(e) => handleChange("type", e.target.value)}
             options={[
-              { value: 'expense', label: '💸 Расход' },
-              { value: 'income', label: '💰 Доход' },
+              { value: "expense", label: "💸 Расход" },
+              { value: "income", label: "💰 Доход" },
             ]}
             error={errors.type}
             required
@@ -183,8 +195,8 @@ export function OperationFormPage() {
           <Select
             label="Счёт"
             value={formData.accountId}
-            onChange={(e) => handleChange('accountId', e.target.value)}
-            options={accounts.map(acc => ({
+            onChange={(e) => handleChange("accountId", e.target.value)}
+            options={accounts.map((acc) => ({
               value: acc.id,
               label: acc.name,
             }))}
@@ -197,8 +209,8 @@ export function OperationFormPage() {
           <Select
             label="Категория"
             value={formData.categoryId}
-            onChange={(e) => handleChange('categoryId', e.target.value)}
-            options={availableCategories.map(cat => ({
+            onChange={(e) => handleChange("categoryId", e.target.value)}
+            options={availableCategories.map((cat) => ({
               value: cat.id,
               label: cat.name,
             }))}
@@ -214,7 +226,7 @@ export function OperationFormPage() {
             step="0.01"
             min="0"
             value={formData.amount}
-            onChange={(e) => handleChange('amount', e.target.value)}
+            onChange={(e) => handleChange("amount", e.target.value)}
             placeholder="0.00"
             error={errors.amount}
             required
@@ -226,7 +238,7 @@ export function OperationFormPage() {
             label="Дата"
             type="date"
             value={formData.date}
-            onChange={(e) => handleChange('date', e.target.value)}
+            onChange={(e) => handleChange("date", e.target.value)}
             error={errors.date}
             required
             icon={<span>📅</span>}
@@ -238,7 +250,7 @@ export function OperationFormPage() {
             <textarea
               className="form-textarea"
               value={formData.comment}
-              onChange={(e) => handleChange('comment', e.target.value)}
+              onChange={(e) => handleChange("comment", e.target.value)}
               placeholder="Добавьте заметку..."
               rows={4}
             />
@@ -246,11 +258,15 @@ export function OperationFormPage() {
 
           {/* Кнопки */}
           <div className="form-actions">
-            <Button type="button" variant="secondary" onClick={() => navigate('/operations')}>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => navigate("/operations")}
+            >
               Отмена
             </Button>
             <Button type="submit" variant="primary">
-              {isEdit ? 'Сохранить' : 'Создать'}
+              {isEdit ? "Сохранить" : "Создать"}
             </Button>
           </div>
         </form>

@@ -2,30 +2,36 @@
  * Страница формы категории (создание/редактирование)
  */
 
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { toast } from 'sonner';
-import { useCategories } from '../features/categories/CategoriesContext.jsx';
-import { Loader } from '../components/common/Loader.jsx';
-import { Card } from '../components/ui/Card.jsx';
-import { Button } from '../components/ui/Button.jsx';
-import { Input } from '../components/ui/Input.jsx';
-import { Select } from '../components/ui/Select.jsx';
-import { CATEGORY_ICONS } from '../data/constants.js';
-import './CategoryFormPage.css';
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "sonner";
+import { useCategories } from "../features/categories/CategoriesContext.jsx";
+import { Loader } from "../components/common/Loader.jsx";
+import { Card } from "../components/ui/Card.jsx";
+import { Button } from "../components/ui/Button.jsx";
+import { Input } from "../components/ui/Input.jsx";
+import { Select } from "../components/ui/Select.jsx";
+import { CATEGORY_ICONS } from "../data/constants.js";
+import "./CategoryFormPage.css";
 
 export function CategoryFormPage() {
   const navigate = useNavigate();
   const { id } = useParams();
   const isEdit = !!id;
 
-  const { createCategory, updateCategory, deleteCategory, getCategoryById, loading } = useCategories();
+  const {
+    createCategory,
+    updateCategory,
+    deleteCategory,
+    getCategoryById,
+    loading,
+  } = useCategories();
 
   // Состояние формы
   const [formData, setFormData] = useState({
-    name: '',
-    type: 'expense',
-    icon: 'other',
+    name: "",
+    type: "expense",
+    icon: "other",
   });
 
   const [errors, setErrors] = useState({});
@@ -44,11 +50,11 @@ export function CategoryFormPage() {
         setFormData({
           name: category.name,
           type: category.type,
-          icon: category.icon || 'other',
+          icon: category.icon || "other",
         });
       } else {
-        toast.error('Категория не найдена');
-        navigate('/');
+        toast.error("Категория не найдена");
+        navigate("/");
       }
     }
   }, [id, isEdit, loading, getCategoryById, navigate]);
@@ -61,9 +67,9 @@ export function CategoryFormPage() {
    * Обработчик изменения
    */
   const handleChange = (field, value) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
     if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: undefined }));
+      setErrors((prev) => ({ ...prev, [field]: undefined }));
     }
   };
 
@@ -74,15 +80,15 @@ export function CategoryFormPage() {
     const newErrors = {};
 
     if (!formData.name.trim()) {
-      newErrors.name = 'Введите название категории';
+      newErrors.name = "Введите название категории";
     }
 
     if (!formData.type) {
-      newErrors.type = 'Выберите тип категории';
+      newErrors.type = "Выберите тип категории";
     }
 
     if (!formData.icon) {
-      newErrors.icon = 'Выберите иконку';
+      newErrors.icon = "Выберите иконку";
     }
 
     setErrors(newErrors);
@@ -96,7 +102,7 @@ export function CategoryFormPage() {
     e.preventDefault();
 
     if (!validate()) {
-      toast.error('Заполните все поля');
+      toast.error("Заполните все поля");
       return;
     }
 
@@ -105,8 +111,8 @@ export function CategoryFormPage() {
       : createCategory(formData);
 
     if (result.success) {
-      toast.success(isEdit ? 'Категория обновлена' : 'Категория создана');
-      navigate('/');
+      toast.success(isEdit ? "Категория обновлена" : "Категория создана");
+      navigate("/");
     } else {
       toast.error(result.error);
     }
@@ -116,11 +122,11 @@ export function CategoryFormPage() {
    * Удаление категории
    */
   const handleDelete = () => {
-    if (window.confirm('Вы уверены? Это действие нельзя отменить.')) {
+    if (window.confirm("Вы уверены? Это действие нельзя отменить.")) {
       const result = deleteCategory(id);
       if (result.success) {
-        toast.success('Категория удалена');
-        navigate('/');
+        toast.success("Категория удалена");
+        navigate("/");
       } else {
         toast.error(result.error);
       }
@@ -130,8 +136,8 @@ export function CategoryFormPage() {
   return (
     <div className="category-form-page">
       <div className="form-header">
-        <h1>{isEdit ? 'Редактировать категорию' : 'Новая категория'}</h1>
-        <Button variant="secondary" onClick={() => navigate('/')}>
+        <h1>{isEdit ? "Редактировать категорию" : "Новая категория"}</h1>
+        <Button variant="secondary" onClick={() => navigate("/")}>
           Отмена
         </Button>
       </div>
@@ -143,7 +149,7 @@ export function CategoryFormPage() {
             label="Название категории"
             type="text"
             value={formData.name}
-            onChange={(e) => handleChange('name', e.target.value)}
+            onChange={(e) => handleChange("name", e.target.value)}
             placeholder="Например: Продукты"
             error={errors.name}
             required
@@ -154,10 +160,10 @@ export function CategoryFormPage() {
           <Select
             label="Тип категории"
             value={formData.type}
-            onChange={(e) => handleChange('type', e.target.value)}
+            onChange={(e) => handleChange("type", e.target.value)}
             options={[
-              { value: 'expense', label: '💸 Расход' },
-              { value: 'income', label: '💰 Доход' },
+              { value: "expense", label: "💸 Расход" },
+              { value: "income", label: "💰 Доход" },
             ]}
             error={errors.type}
             required
@@ -167,12 +173,12 @@ export function CategoryFormPage() {
           <div className="icon-selector">
             <label className="form-label">Иконка категории</label>
             <div className="icons-grid">
-              {CATEGORY_ICONS.map(icon => (
+              {CATEGORY_ICONS.map((icon) => (
                 <button
                   key={icon.id}
                   type="button"
-                  className={`icon-option ${formData.icon === icon.id ? 'icon-selected' : ''}`}
-                  onClick={() => handleChange('icon', icon.id)}
+                  className={`icon-option ${formData.icon === icon.id ? "icon-selected" : ""}`}
+                  onClick={() => handleChange("icon", icon.id)}
                   title={icon.label}
                 >
                   {icon.emoji}
@@ -189,11 +195,15 @@ export function CategoryFormPage() {
               </Button>
             )}
             <div style={{ flex: 1 }} />
-            <Button type="button" variant="secondary" onClick={() => navigate('/')}>
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => navigate("/")}
+            >
               Отмена
             </Button>
             <Button type="submit" variant="primary">
-              {isEdit ? 'Сохранить' : 'Создать'}
+              {isEdit ? "Сохранить" : "Создать"}
             </Button>
           </div>
         </form>

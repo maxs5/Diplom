@@ -1,69 +1,106 @@
-const { users, operations } = require('../data/inMemoryStore');
+const User = require("../models/User");
+const Operation = require("../models/Operation");
+const RecurringOperation = require("../models/RecurringOperation");
+const Account = require("../models/Account");
+const Category = require("../models/Category");
+const Budget = require("../models/Budget");
 
-function updateMe(req, res) {
+function mapUser(user) {
+  return {
+    id: user._id.toString(),
+    name: user.name,
+    email: user.email,
+    currency: user.currency || "RUB",
+  };
+}
+
+async function updateMe(req, res) {
   const id = req.auth.userId;
   const { name, email } = req.body || {};
 
-  const userIndex = users.findIndex((user) => user.id === id);
-  if (userIndex === -1) {
-    return res.status(404).json({ success: false, error: 'Пользователь не найден' });
-  }
-
   if (!name && !email) {
-    return res.status(400).json({ success: false, error: 'Передайте name или email для обновления' });
+    return res
+      .status(400)
+      .json({
+        success: false,
+        error: "Передайте name или email для обновления",
+      });
   }
 
-  if (email) {
-    const emailTaken = users.some((user) => user.email === email && user.id !== id);
-    if (emailTaken) {
-      return res.status(409).json({ success: false, error: 'Email уже используется' });
+  try {
+    const user = await User.findById(id);
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, error: "Пользователь не найден" });
     }
+
+    if (email) {
+      const normalizedEmail = String(email).trim().toLowerCase();
+      const emailTaken = await User.exists({
+        email: normalizedEmail,
+        _id: { $ne: id },
+      });
+      if (emailTaken) {
+        return res
+          .status(409)
+          .json({ success: false, error: "Email уже используется" });
+      }
+      user.email = normalizedEmail;
+    }
+
+    if (name) {
+      user.name = String(name).trim();
+    }
+
+    await user.save();
+
+    return res.json({
+      success: true,
+      user: mapUser(user),
+    });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ success: false, error: "Ошибка обновления профиля" });
   }
-
-  users[userIndex] = {
-    ...users[userIndex],
-    ...(name ? { name } : {}),
-    ...(email ? { email } : {}),
-  };
-
-  return res.json({
-    success: true,
-    user: {
-      id: users[userIndex].id,
-      name: users[userIndex].name,
-      email: users[userIndex].email,
-      currency: users[userIndex].currency || 'RUB',
-    },
-  });
 }
 
-function removeUser(req, res) {
-  const { id } = req.params;
-  const userIndex = users.findIndex((user) => user.id === id);
+async function removeMe(req, res) {
+  const id = req.auth.userId;
 
-  if (userIndex === -1) {
-    return res.status(404).json({ success: false, error: 'Пользователь не найден' });
-  }
-
-  const [deletedUser] = users.splice(userIndex, 1);
-
-  for (let i = operations.length - 1; i >= 0; i -= 1) {
-    if (operations[i].userId === id) {
-      operations.splice(i, 1);
+  try {
+    const deletedUser = await User.findByIdAndDelete(id);
+    if (!deletedUser) {
+      return res
+        .status(404)
+        .json({ success: false, error: "Пользователь не найден" });
     }
-  }
 
-  return res.json({
-    success: true,
-    user: {
-      id: deletedUser.id,
-      email: deletedUser.email,
-      name: deletedUser.name,
-    },
-  });
+    await Promise.all([
+      Operation.deleteMany({ userId: id }),
+      RecurringOperation.deleteMany({ userId: id }),
+      Account.deleteMany({ userId: id }),
+      Category.deleteMany({ userId: id }),
+      Budget.deleteMany({ userId: id }),
+    ]);
+
+    return res.json({
+      success: true,
+      user: {
+        id: deletedUser._id.toString(),
+        email: deletedUser.email,
+        name: deletedUser.name,
+      },
+    });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ success: false, error: "Ошибка удаления пользователя" });
+  }
 }
 
 module.exports = {
   updateMe,
-  removeUser,
+  removeMe,
 };

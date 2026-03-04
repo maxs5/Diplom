@@ -1,8 +1,8 @@
 /**
  * Компонент выпадающего списка
- * 
+ *
  * Простой select с поддержкой label и ошибок
- * 
+ *
  * Пропсы:
  * - label: подпись к полю
  * - error: текст ошибки
@@ -10,29 +10,25 @@
  * - ...rest: остальные атрибуты select
  */
 
-import React from 'react';
-import './Select.css';
+import React from "react";
+import "./Select.css";
 
-export function Select({ 
-  label, 
-  error, 
+export function Select({
+  label,
+  error,
   options = [],
   placeholder,
-  className = '',
+  className = "",
   children,
-  ...props 
+  ...props
 }) {
   const hasPlaceholder = Boolean(placeholder);
 
   return (
     <div className="select-wrapper">
-      {label && (
-        <label className="select-label">
-          {label}
-        </label>
-      )}
+      {label && <label className="select-label">{label}</label>}
       <select
-        className={`select ${error ? 'select-error' : ''} ${className}`}
+        className={`select ${error ? "select-error" : ""} ${className}`}
         {...props}
       >
         {hasPlaceholder && (
@@ -40,15 +36,14 @@ export function Select({
             {placeholder}
           </option>
         )}
-        {children || options.map(opt => (
-          <option key={opt.value} value={opt.value}>
-            {opt.label}
-          </option>
-        ))}
+        {children ||
+          options.map((opt) => (
+            <option key={opt.value} value={opt.value}>
+              {opt.label}
+            </option>
+          ))}
       </select>
-      {error && (
-        <span className="select-error-text">{error}</span>
-      )}
+      {error && <span className="select-error-text">{error}</span>}
     </div>
   );
 }

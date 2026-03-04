@@ -1,6 +1,6 @@
 /**
  * Утилиты для валидации форм
- * 
+ *
  * Набор функций для проверки корректности данных
  */
 
@@ -30,7 +30,9 @@ export function isValidPassword(password, minLength = 6) {
  * @returns {boolean}
  */
 export function isRequired(value) {
-  return value !== null && value !== undefined && value.toString().trim() !== '';
+  return (
+    value !== null && value !== undefined && value.toString().trim() !== ""
+  );
 }
 
 /**
@@ -115,11 +117,11 @@ export function isNotFutureDate(dateString) {
 /**
  * Валидатор формы
  * Применяет правила валидации к объекту
- * 
+ *
  * @param {Object} data - Данные формы
  * @param {Object} rules - Правила валидации
  * @returns {Object} Объект с ошибками
- * 
+ *
  * Пример:
  * const errors = validateForm(
  *   { email: 'test', password: '123' },
@@ -137,11 +139,11 @@ export function isNotFutureDate(dateString) {
  */
 export function validateForm(data, rules) {
   const errors = {};
-  
+
   for (const field in rules) {
     const fieldRules = rules[field];
     const value = data[field];
-    
+
     for (const { rule, message } of fieldRules) {
       if (!rule(value)) {
         errors[field] = message;
@@ -149,7 +151,7 @@ export function validateForm(data, rules) {
       }
     }
   }
-  
+
   return errors;
 }
 
@@ -159,7 +161,7 @@ export function validateForm(data, rules) {
  * @returns {any}
  */
 export function sanitize(value) {
-  if (typeof value === 'string') {
+  if (typeof value === "string") {
     return value.trim();
   }
   return value;

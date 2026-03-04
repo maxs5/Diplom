@@ -1,38 +1,38 @@
 /**
  * Страница авторизации и регистрации
- * 
+ *
  * Позволяет пользователю:
  * - Войти в существующий аккаунт
  * - Зарегистрировать новый аккаунт
  */
 
-import React, { useState } from 'react';
-import { Navigate } from 'react-router-dom';
-import { useAuth } from '../features/auth/AuthContext.jsx';
-import { Button } from '../components/ui/Button.jsx';
-import { Input } from '../components/ui/Input.jsx';
-import { Card } from '../components/ui/Card.jsx';
-import { Spinner } from '../components/ui/Spinner.jsx';
-import { toast } from 'sonner';
-import './AuthPage.css';
+import React, { useState } from "react";
+import { Navigate } from "react-router-dom";
+import { useAuth } from "../features/auth/AuthContext.jsx";
+import { Button } from "../components/ui/Button.jsx";
+import { Input } from "../components/ui/Input.jsx";
+import { Card } from "../components/ui/Card.jsx";
+import { Spinner } from "../components/ui/Spinner.jsx";
+import { toast } from "sonner";
+import "./AuthPage.css";
 
 export function AuthPage() {
   // Получаем функции авторизации из контекста
   const { login, register, isAuthenticated } = useAuth();
-  
+
   // Переключатель между формой входа и регистрации
   const [isLogin, setIsLogin] = useState(true);
-  
+
   // Состояние формы
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    name: '',
+    email: "",
+    password: "",
+    name: "",
   });
-  
+
   // Ошибки валидации
   const [errors, setErrors] = useState({});
-  
+
   // Флаг загрузки (показываем при отправке формы)
   const [loading, setLoading] = useState(false);
 
@@ -46,16 +46,16 @@ export function AuthPage() {
    */
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
-    
+
     // Очищаем ошибку для этого поля
     if (errors[name]) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        [name]: undefined
+        [name]: undefined,
       }));
     }
   };
@@ -65,26 +65,26 @@ export function AuthPage() {
    */
   const validate = () => {
     const newErrors = {};
-    
+
     // Email обязателен
     if (!formData.email) {
-      newErrors.email = 'Введите email';
+      newErrors.email = "Введите email";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Введите корректный email';
+      newErrors.email = "Введите корректный email";
     }
-    
+
     // Пароль обязателен
     if (!formData.password) {
-      newErrors.password = 'Введите пароль';
+      newErrors.password = "Введите пароль";
     } else if (formData.password.length < 6) {
-      newErrors.password = 'Минимум 6 символов';
+      newErrors.password = "Минимум 6 символов";
     }
-    
+
     // Имя обязательно только при регистрации
     if (!isLogin && !formData.name) {
-      newErrors.name = 'Введите имя';
+      newErrors.name = "Введите имя";
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -94,29 +94,29 @@ export function AuthPage() {
    */
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Валидируем
     if (!validate()) {
       return;
     }
-    
+
     setLoading(true);
-    
+
     // Небольшая задержка для UX
-    await new Promise(resolve => setTimeout(resolve, 500));
-    
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
     // Вход или регистрация
     const result = await (isLogin
       ? login(formData.email, formData.password)
       : register(formData));
-    
+
     setLoading(false);
-    
+
     // Обрабатываем результат
     if (result.success) {
-      toast.success(isLogin ? 'Добро пожаловать!' : 'Регистрация успешна!');
+      toast.success(isLogin ? "Добро пожаловать!" : "Регистрация успешна!");
     } else {
-      toast.error(result.error || 'Произошла ошибка');
+      toast.error(result.error || "Произошла ошибка");
     }
   };
 
@@ -127,9 +127,9 @@ export function AuthPage() {
     setIsLogin(!isLogin);
     setErrors({});
     setFormData({
-      email: '',
-      password: '',
-      name: '',
+      email: "",
+      password: "",
+      name: "",
     });
   };
 
@@ -141,9 +141,7 @@ export function AuthPage() {
           <div className="auth-logo">💰</div>
           <h1 className="auth-title">Finance App</h1>
           <p className="auth-subtitle">
-            {isLogin 
-              ? 'Войдите в свой аккаунт' 
-              : 'Создайте новый аккаунт'}
+            {isLogin ? "Войдите в свой аккаунт" : "Создайте новый аккаунт"}
           </p>
         </div>
 
@@ -200,11 +198,21 @@ export function AuthPage() {
               disabled={loading}
             >
               {loading ? (
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+                <span
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "8px",
+                  }}
+                >
                   <Spinner size="sm" />
-                  {isLogin ? 'Входим...' : 'Регистрируем...'}
+                  {isLogin ? "Входим..." : "Регистрируем..."}
                 </span>
-              ) : isLogin ? 'Войти' : 'Зарегистрироваться'}
+              ) : isLogin ? (
+                "Войти"
+              ) : (
+                "Зарегистрироваться"
+              )}
             </Button>
           </form>
         </Card>
@@ -212,16 +220,14 @@ export function AuthPage() {
         {/* Переключатель режима */}
         <div className="auth-toggle">
           <span className="auth-toggle-text">
-            {isLogin 
-              ? 'Нет аккаунта?' 
-              : 'Уже есть аккаунт?'}
+            {isLogin ? "Нет аккаунта?" : "Уже есть аккаунт?"}
           </span>
           <button
             type="button"
             onClick={toggleMode}
             className="auth-toggle-button"
           >
-            {isLogin ? 'Зарегистрироваться' : 'Войти'}
+            {isLogin ? "Зарегистрироваться" : "Войти"}
           </button>
         </div>
 
@@ -229,7 +235,8 @@ export function AuthPage() {
         <div className="auth-demo">
           <p className="auth-demo-title">Для тестирования:</p>
           <p className="auth-demo-text">
-            Email: demo@test.com<br />
+            Email: demo@test.com
+            <br />
             Пароль: 123456
           </p>
         </div>

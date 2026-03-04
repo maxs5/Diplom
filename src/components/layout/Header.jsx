@@ -1,6 +1,6 @@
 /**
  * Компонент шапки приложения
- * 
+ *
  * Содержит:
  * - Кнопку меню (на мобильных)
  * - Название приложения
@@ -8,11 +8,11 @@
  * - Кнопку выхода
  */
 
-import React from 'react';
-import { useAuth } from '../../features/auth/AuthContext.jsx';
-import { useTheme } from '../../features/theme/ThemeContext.jsx';
-import { Button } from '../ui/Button.jsx';
-import './Header.css';
+import React from "react";
+import { useAuth } from "../../features/auth/AuthContext.jsx";
+import { useTheme } from "../../features/theme/ThemeContext.jsx";
+import { Button } from "../ui/Button.jsx";
+import "./Header.css";
 
 export function Header({ onMenuClick }) {
   const { user, logout } = useAuth();
@@ -22,10 +22,14 @@ export function Header({ onMenuClick }) {
     <header className="header">
       <div className="header-left">
         {/* Кнопка меню (показывается только на мобильных) */}
-        <button className="header-menu-btn" onClick={onMenuClick} aria-label="Открыть меню">
+        <button
+          className="header-menu-btn"
+          onClick={onMenuClick}
+          aria-label="Открыть меню"
+        >
           ☰
         </button>
-        
+
         {/* Логотип и название */}
         <div className="header-brand">
           <span className="header-logo">💰</span>
@@ -39,9 +43,9 @@ export function Header({ onMenuClick }) {
           variant="ghost"
           size="sm"
           onClick={toggleTheme}
-          title={isDark ? 'Светлая тема' : 'Темная тема'}
+          title={isDark ? "Светлая тема" : "Темная тема"}
         >
-          {isDark ? '☀️' : '🌙'}
+          {isDark ? "☀️" : "🌙"}
         </Button>
 
         {/* Информация о пользователе */}
@@ -49,14 +53,9 @@ export function Header({ onMenuClick }) {
           <span className="header-user-icon">👤</span>
           <span className="header-user-name">{user?.name}</span>
         </div>
-        
+
         {/* Кнопка выхода */}
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={logout}
-          title="Выйти"
-        >
+        <Button variant="ghost" size="sm" onClick={logout} title="Выйти">
           <span className="header-logout-icon">🚪</span>
           <span className="header-logout-text">Выход</span>
         </Button>

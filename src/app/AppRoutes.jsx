@@ -1,31 +1,47 @@
-import React, { lazy } from 'react';
-import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
-import { ProtectedRoute } from '../components/common/ProtectedRoute.jsx';
-import { Layout } from '../components/layout/Layout.jsx';
+import React, { lazy } from "react";
+import { Navigate, Outlet, Route, Routes } from "react-router-dom";
+import { ProtectedRoute } from "../components/common/ProtectedRoute.jsx";
+import { Layout } from "../components/layout/Layout.jsx";
 
 const AuthPage = lazy(() =>
-  import('../pages/AuthPage.jsx').then((module) => ({ default: module.AuthPage }))
+  import("../pages/AuthPage.jsx").then((module) => ({
+    default: module.AuthPage,
+  })),
 );
 const DashboardPage = lazy(() =>
-  import('../pages/DashboardPage.jsx').then((module) => ({ default: module.DashboardPage }))
+  import("../pages/DashboardPage.jsx").then((module) => ({
+    default: module.DashboardPage,
+  })),
 );
 const OperationsPage = lazy(() =>
-  import('../pages/OperationsPage.jsx').then((module) => ({ default: module.OperationsPage }))
+  import("../pages/OperationsPage.jsx").then((module) => ({
+    default: module.OperationsPage,
+  })),
 );
 const OperationFormPage = lazy(() =>
-  import('../pages/OperationFormPage.jsx').then((module) => ({ default: module.OperationFormPage }))
+  import("../pages/OperationFormPage.jsx").then((module) => ({
+    default: module.OperationFormPage,
+  })),
 );
 const AccountFormPage = lazy(() =>
-  import('../pages/AccountFormPage.jsx').then((module) => ({ default: module.AccountFormPage }))
+  import("../pages/AccountFormPage.jsx").then((module) => ({
+    default: module.AccountFormPage,
+  })),
 );
 const CategoryFormPage = lazy(() =>
-  import('../pages/CategoryFormPage.jsx').then((module) => ({ default: module.CategoryFormPage }))
+  import("../pages/CategoryFormPage.jsx").then((module) => ({
+    default: module.CategoryFormPage,
+  })),
 );
 const SettingsPage = lazy(() =>
-  import('../pages/SettingsPage.jsx').then((module) => ({ default: module.SettingsPage }))
+  import("../pages/SettingsPage.jsx").then((module) => ({
+    default: module.SettingsPage,
+  })),
 );
 const BudgetsPage = lazy(() =>
-  import('../pages/BudgetsPage.jsx').then((module) => ({ default: module.BudgetsPage }))
+  import("../pages/BudgetsPage.jsx").then((module) => ({
+    default: module.BudgetsPage,
+  })),
 );
 
 function ProtectedLayout() {

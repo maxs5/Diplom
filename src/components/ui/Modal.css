@@ -20,7 +20,9 @@
   overflow: auto;
   box-shadow: var(--modal-shadow);
   border: 1px solid var(--modal-border);
-  transition: background var(--transition-base), border var(--transition-base);
+  transition:
+    background var(--transition-base),
+    border var(--transition-base);
 }
 
 .modal-header {
@@ -53,7 +55,10 @@
   align-items: center;
   justify-content: center;
   border-radius: var(--radius-sm);
-  transition: background var(--transition-fast), color var(--transition-fast), transform 0.15s ease;
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast),
+    transform 0.15s ease;
 }
 
 .modal-close:hover {

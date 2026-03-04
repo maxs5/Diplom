@@ -1,6 +1,6 @@
 /**
  * Компонент кнопки
- * 
+ *
  * Пропсы:
  * - variant: 'primary' | 'secondary' | 'ghost' | 'danger' - тип кнопки
  * - size: 'sm' | 'md' | 'lg' - размер кнопки
@@ -9,30 +9,29 @@
  * - ...rest: остальные атрибуты button
  */
 
-import React from 'react';
-import './Button.css';
+import React from "react";
+import "./Button.css";
 
-export function Button({ 
-  variant = 'primary',
-  size = 'md',
+export function Button({
+  variant = "primary",
+  size = "md",
   fullWidth = false,
   children,
-  className = '',
+  className = "",
   ...rest
 }) {
   const buttonClass = [
-    'btn',
+    "btn",
     `btn-${variant}`,
     `btn-${size}`,
-    fullWidth && 'btn-full-width',
-    className
-  ].filter(Boolean).join(' ');
+    fullWidth && "btn-full-width",
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return (
-    <button
-      className={buttonClass}
-      {...rest}
-    >
+    <button className={buttonClass} {...rest}>
       {children}
     </button>
   );

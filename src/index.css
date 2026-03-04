@@ -4,7 +4,8 @@
 
 :root {
   /* Шрифты */
-  --font-sans: "Segoe UI Variable", "Trebuchet MS", "Segoe UI", "Candara", sans-serif;
+  --font-sans:
+    "Segoe UI Variable", "Trebuchet MS", "Segoe UI", "Candara", sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
   /* Цвета бренда */
@@ -47,8 +48,17 @@
   --color-border-light: rgba(138, 153, 171, 0.22);
 
   /* Фоны приложения */
-  --app-bg: radial-gradient(circle at 0% -20%, #e9f0ff 0%, #f8fbff 44%, #f3f8ff 100%);
-  --content-bg: linear-gradient(165deg, rgba(255, 255, 255, 0.86), rgba(248, 252, 255, 0.76));
+  --app-bg: radial-gradient(
+    circle at 0% -20%,
+    #e9f0ff 0%,
+    #f8fbff 44%,
+    #f3f8ff 100%
+  );
+  --content-bg: linear-gradient(
+    165deg,
+    rgba(255, 255, 255, 0.86),
+    rgba(248, 252, 255, 0.76)
+  );
   --overlay-bg: rgba(17, 24, 39, 0.32);
 
   /* Тени */
@@ -65,7 +75,11 @@
   --hover-bg: rgba(99, 102, 241, 0.1);
   --sidebar-bg: rgba(255, 255, 255, 0.86);
   --sidebar-hover-bg: rgba(99, 102, 241, 0.08);
-  --sidebar-active-bg: linear-gradient(90deg, rgba(99, 102, 241, 0.2), rgba(129, 140, 248, 0.08));
+  --sidebar-active-bg: linear-gradient(
+    90deg,
+    rgba(99, 102, 241, 0.2),
+    rgba(129, 140, 248, 0.08)
+  );
 
   /* Кнопки */
   --btn-primary-bg: linear-gradient(135deg, #2d6cdf, #5b8eff);
@@ -151,8 +165,17 @@
 
   --color-primary-light: #6366f1;
 
-  --app-bg: radial-gradient(circle at 0% -18%, #1e293b 0%, #111827 42%, #0f172a 100%);
-  --content-bg: linear-gradient(165deg, rgba(15, 23, 42, 0.8), rgba(17, 24, 39, 0.78));
+  --app-bg: radial-gradient(
+    circle at 0% -18%,
+    #1e293b 0%,
+    #111827 42%,
+    #0f172a 100%
+  );
+  --content-bg: linear-gradient(
+    165deg,
+    rgba(15, 23, 42, 0.8),
+    rgba(17, 24, 39, 0.78)
+  );
   --overlay-bg: rgba(2, 6, 23, 0.64);
 
   --shadow-header: 0 8px 30px rgb(2 6 23 / 0.5);
@@ -164,7 +187,11 @@
   --hover-bg: rgba(99, 102, 241, 0.2);
   --sidebar-bg: rgba(15, 23, 42, 0.9);
   --sidebar-hover-bg: rgba(99, 102, 241, 0.16);
-  --sidebar-active-bg: linear-gradient(90deg, rgba(99, 102, 241, 0.32), rgba(99, 102, 241, 0.08));
+  --sidebar-active-bg: linear-gradient(
+    90deg,
+    rgba(99, 102, 241, 0.32),
+    rgba(99, 102, 241, 0.08)
+  );
 
   --btn-primary-bg: linear-gradient(135deg, #3b82f6, #6366f1);
   --btn-primary-bg-hover: linear-gradient(135deg, #2563eb, #4f46e5);
